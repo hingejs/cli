@@ -1,0 +1,30 @@
+{
+  "name": "@hingejs/cli",
+  "description": "HingeJS CLI Project generator",
+  "version": "0.0.0",
+  "license": "MIT",
+  "keywords": [
+    "app",
+    "api",
+    "custom elements",
+    "framework",
+    "javascript",
+    "js",
+    "spa",
+    "web",
+    "web components",
+    "web-components"
+  ],
+  "bin": {
+    "hingejs": "index.js"
+  },
+  "scripts": {
+    "start": "node test.js"
+  },
+  "dependencies": {
+    "commander": "^2.11.0",
+    "file-system": "^2.2.2",
+    "graceful-copy": "^1.1.0",
+    "inquirer": "^3.3.0"
+  }
+}

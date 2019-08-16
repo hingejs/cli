@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base href="/">
+        <title><%= htmlWebpackPlugin.options.title %></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link data-id="favicon" rel="shortcut icon" sizes="16x16 32x32 96x96" type="image/png" href="assets/favicon-32x32.png">
+        <link rel="stylesheet" type="text/css" href="main.css" />
+    </head>
+    <body>
+      <modal-blur data-blur="false">
+        <main class="content-display">
+          <route-display></route-display>
+        </main>
+      </modal-blur>
+      <touch-swipe>
+        <notification-bar></notification-bar>
+      </touch-swipe>
+    </body>
+</html>

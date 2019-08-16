@@ -1,0 +1,60 @@
+{
+  "name": "project",
+  "description": "Project Description",
+  "version": "0.0.0",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": true,
+  "scripts": {
+    "lint:js": "./node_modules/.bin/eslint -c ./.eslintrc --ext .js ./src",
+    "lint:css": "./node_modules/.bin/stylelint './src/**/*.css' .'/src/**/*.html'",
+    "lint": "npm run lint:css && npm run lint:js",
+    "build:cache": "node html-cache.build.js",
+    "build:release": "npm run build:cache && webpack --mode production --config webpack.config.js",
+    "build:beta": "npm run build:cache && webpack --mode development --config webpack.config.js",
+    "start": "./node_modules/.bin/nodemon html-cache.build.js & ./node_modules/.bin/webpack-dev-server --mode development --config webpack.config.js",
+    "serve": "npm run build:beta && node dist/serve.js",
+    "test": "npm run build:cache && ./node_modules/.bin/karma start test/karma.conf.js"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "htm,html"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "color-hex-case": "lower",
+      "indentation": null,
+      "no-empty-source": null,
+      "selector-type-no-unknown": [
+        true,
+        {
+          "ignore": [
+            "custom-elements",
+            "default-namespace"
+          ]
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.19",
+    "connect-history-api-fallback": "^1.5.0",
+    "copy-webpack-plugin": "^4.5.4",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.7.0",
+    "express": "^4.16.4",
+    "html-webpack-plugin": "^3.2.0",
+    "nodemon": "^1.18.5",
+    "style-loader": "^0.23.1",
+    "stylelint": "^9.6.0",
+    "stylelint-config-standard": "^18.2.0",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  }
+}

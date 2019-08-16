@@ -1,0 +1,11 @@
+const path = require('path')
+const appDir = path.dirname(require.main.filename)
+const Logging = require('./logging')
+
+Logging.validation('validation', appDir)
+Logging.conclusion(appDir)
+Logging.error(appDir)
+Logging.warn(appDir)
+Logging.success(appDir)
+Logging.info(appDir)
+Logging.normal(appDir)

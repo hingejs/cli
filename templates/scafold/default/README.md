@@ -1,6 +1,4 @@
-# &#8762; HingeJS - Command-line Interface
-
-Simple Single Page Application Framework and code generator
+# Project
 
 ## Installation
 
@@ -89,7 +87,7 @@ $ npm run test
 
 ## Code Quality Check with End to End Testing
 
-Not yet implemented.  Possibly Puppeteer
+Not yet implemented.  Possibly Puppeteer 
 
 ## Browser Support
 
@@ -164,111 +162,5 @@ process.on('SIGINT', () => {
   process.exit(0)
 })
 ```
-
-## Development
-
-- Routing
-- Service Layer
-- Feature Folders
-- Assets
-- Custom Elements (Shared Widgets)
-- Template Caching
-
-
-#### Routing Path
-
-All routing paths are absolute but a parameter can be added with a colon `:`.
-
-```js
-RouterService
-  .setPath('/alerts/:id', alertController)
-  .setPath('/alerts/:id?', alertControllerOptional)
-  .setPath('/alerts/:id/warn/:status?', alertWarnControllerOptional)
-```
-
-> Adding a question mark `?` will make the param optional.
-
-The `req` object will have a `new Map()` named `params` that will have the the values found from the url.
-
-```js
-const homeController = (req, next) => {
-  req.params.get('id')
-  req.params.get('status')
-  next()
-}
-```
-
-### Service Layer
-
-Use the file `./src/services/template.service.js` as a starter file to create services.  Not all services are shared and need to be put into the `./src/services` folder. They can be placed in the feature folder. Two helper files `observables.js` and `http-fetch.js` can use used with these services.
-
-- All business logic should be placed in a service
-- Services should mainly be a `singleton`
-- Services can be placed in a `Feature Folder` if not used by multiple files
-
-### Assets
-
-This is where images, documents etc. will go and be referenced. The folder `assets` can be found in the root directory.
-
-### Feature Folders
-
-Feature folders will group all coding content related to that feature. These folders should be created in the `./src/features` folder.
-
-An arrivals feature might include the `.html` page, the `.css` file and any `.js` files such as services, helper or any related files.  It must include an `index.js` file that will be used to import all files and logic needed for that feature.
-
-Once completed the `index.js` file should be imported to the `./src/main.js` file.
-
-- The `.html` file must be unique for the `Template/HTML Caching`
-
-### Template Caching
-
-All html pages in the feature folder, excluding the `index.html` will be copied into a file called `html-cache.js`. This file is to be used to load in the html to the `<router-display>`
-
-- Note that the `index.html` is the main layout
-- Avoid JavaScript logic in the html files
-
-### Custom Elements (Shared Widgets)
-
-Custom elements are found in `./src/widgets` and are shared throughout the app.  These are custom HTML tags created for reusability.
-
-> At the moment shadow dom's use is to be limited due to browser support for allowing override styles.
-
-### Debugging tricks
-
-- console.trace()
-- console.table()
-- console.dir()
-
-### Testing for XSS Attacks
-
-you can use the following code with innerHTML to ensure the output is secure
-
-```html
- <img src=x onerror="alert('XSS Attack')">
-```
-
-Use case
-
-```html
-<body>
-  <div id="app"></div>
-  <script>
-    const app = document.querySelector('#app')
-    app.innerHTML = '<img src=x onerror="alert(\'XSS Attack\')">'
-  </script>
-</body>
-```
-
-Remedy
-
-### Alternatives to innerHTML
-
-If there is no need for innerHTML you can do the following
-
-```js
-const element = document.querySelector('div')
-element.firstChild.nodeValue = '<strong>value</strong>'
-// or
-element.textContent = '<strong>value</strong>'
-```
+> https://www.npmjs.com/package/forever can be used to run the server incase of crashes
 
