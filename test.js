@@ -4,10 +4,21 @@ const copy = require('graceful-copy')
 const inquirer = require('inquirer')
 const path = require('path')
 const program = require('commander')
-const fs = require("file-system");
+const fs = require("file-system")
 const { version } = require('./package.json')
 const ALLOWED_TYPES = ['component', 'c', 'element', 'e', 'feature', 'f', 'service', 's']
-program.version(version)
+const Logging = require('./logging')
+
+program
+  .version(version)
+  .usage('<command> [options]')
+  .on('--help',() => {
+    console.log('')
+    Logging.info('More command info:')
+    console.log('')
+    Logging.success('  $ hingejs generate -h')
+    Logging.success('  $ hingejs new -h')
+  })
 
 program
   .command('generate <type>')
@@ -18,39 +29,46 @@ program
     if(ALLOWED_TYPES.includes(type)) {
       console.log("Hello", type)
     } else {
-      console.error(`Allowed types are: ${ALLOWED_TYPES.join(', ')}`)
+      Logging.error(`Allowed types are: ${ALLOWED_TYPES.join(', ')}`)
     }
   })
   .on('--help',() => {
     console.log('')
-    console.log('Examples:')
+    Logging.info('Examples:')
     console.log('')
-    console.log('  $ hingejs generate <type>')
-    console.log('  $ hingejs generate component')
-    console.log('  $ hingejs generate element')
-    console.log('  $ hingejs generate feature')
-    console.log('  $ hingejs generate service')
+    Logging.info('  $ hingejs generate <type>')
+    Logging.success('  $ hingejs generate component')
+    Logging.success('  $ hingejs generate element')
+    Logging.success('  $ hingejs generate feature')
+    Logging.success('  $ hingejs generate service')
   })
 
 program
   .command("new <projectName>")
   .option('-i, --i18n', 'Internationalize the new project')
+  .option('-p, --port <number>', 'integer argument', myParseInt, 9000)
   .alias('n')
   .description('Generate a new folder for the project')
   .action((projectName, options) => {
-    //newProject();
-    console.log("init", projectName, options.i18n)
+    //newProject()
+    console.log("init", projectName, options.i18n, options.port)
   })
   .on('--help',() => {
-    console.log('');
-    console.log('Examples:');
-    console.log('');
-    console.log('  $ hingejs new <projectName>');
-    console.log('  $ hingejs new <projectName> --i18n');
+    console.log('')
+    console.log('Examples:')
+    console.log('')
+    Logging.success('  $ hingejs new <projectName>')
+    Logging.success('  $ hingejs new <projectName> --i18n')
+    Logging.success('  $ hingejs new <projectName> --port 7500')
+    Logging.success('  $ hingejs new <projectName> --i18n --port 7500')
   })
 
 program.parse(process.argv)
 
+
+function myParseInt(value) {
+  return parseInt(value, 10)
+}
 
 function newProject() {
   inquirer.prompt([
@@ -106,12 +124,12 @@ function newProject() {
       }
 
       fs.mkdir(answers.name, { recursive: true }, (err) => {
-        if (err) throw err;
-      });
+        if (err) throw err
+      })
       fs.mkdir(answers.name + '/templates', { recursive: true }, (err) => {
-        if (err) throw err;
-      });
-      copy('./templates', './' + answers.name + '/templates');
-      fs.writeFileSync('./' + answers.name + '/package.json', JSON.stringify(package, null, 4));
+        if (err) throw err
+      })
+      copy('./templates', './' + answers.name + '/templates')
+      fs.writeFileSync('./' + answers.name + '/package.json', JSON.stringify(package, null, 4))
     })
 }
