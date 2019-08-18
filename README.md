@@ -1,6 +1,8 @@
-# &#8762; HingeJS - Command-line Interface
+# &#8762; HingeJS - CLI Project Generator
 
-Simple Single Page Application Framework and code generator
+Command line interface
+
+Simple Single Page Application and code generator
 
 ## Installation
 
