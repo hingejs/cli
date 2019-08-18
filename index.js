@@ -1,48 +1,101 @@
 #!/usr/bin/env node
 
 const copy = require('graceful-copy')
-var inquirer = require('inquirer')
-var path = require('path')
-var program = require('commander')
+const inquirer = require('inquirer')
+const path = require('path')
+const program = require('commander')
+const fs = require("file-system")
+const { version } = require('./package.json')
+const ALLOWED_TYPES = ['component', 'c', 'element', 'e', 'feature', 'f', 'service', 's']
+const Logging = require('./logging')
 
 program
-  .usage('[options] <file>')
-  .option('-b, --base', 'Base Template')
-  .option('-c, --crud', 'Crud Template')
-  .option('-d, --demo', 'Full Demo')
-  .option('-j, --json', 'Crud with json server Template')
-  .parse(process.argv)
+  .version(version)
+  .usage('<command> [options]')
+  .on('--help', () => {
+    console.log('')
+    Logging.info('More command info:')
+    console.log('')
+    Logging.success('  $ hingejs generate -h')
+    Logging.success('  $ hingejs new -h')
+  })
 
-var template = 'spa'
+program
+  .command('generate <type>')
+  .alias('g')
+  .description('Generate a new [component|element|feature|service] template')
+  .action((type) => {
+    type = type.toLowerCase()
+    if (ALLOWED_TYPES.includes(type)) {
+      Logging.error(type, 'not yet implemented')
+    } else {
+      Logging.error(`Allowed types are: ${ALLOWED_TYPES.join(', ')}`)
+    }
+  })
+  .on('--help', () => {
+    console.log('')
+    Logging.info('Examples:')
+    console.log('')
+    Logging.info('  $ hingejs generate <type>')
+    Logging.success('  $ hingejs generate component')
+    Logging.success('  $ hingejs generate element')
+    Logging.success('  $ hingejs generate feature')
+    Logging.success('  $ hingejs generate service')
+  })
 
-if (program.crud) template = 'spa-crud'
-else if (program.json) template = 'spa-json'
-else if (program.demo) template = 'spa-demo'
+program
+  .command("new <projectFolderName>")
+  .option('-i, --i18n', 'Internationalize the new project')
+  .option('-p, --port <number>', 'integer argument', myParseInt, 9000)
+  .alias('n')
+  .description('Generate a new folder for the project')
+  .action((projectFolderName, options) => {
+    //newProject()
+    console.log("init", projectFolderName, options.i18n, options.port)
+  })
+  .on('--help', () => {
+    console.log('')
+    console.log('Examples:')
+    console.log('')
+    Logging.success('  $ hingejs new <projectFolderName>')
+    Logging.success('  $ hingejs new <projectFolderName> --i18n')
+    Logging.success('  $ hingejs new <projectFolderName> --port 7500')
+    Logging.success('  $ hingejs new <projectFolderName> --i18n --port 7500')
+  })
 
-const folderName = program.args.shift() || '.'
-const templatesPath = path.join(__dirname, 'templates', template)
-const destinationPath = path.resolve(folderName)
+program.parse(process.argv)
 
- inquirer.prompt([{
-            type: "confirm",
-            message: "Are you sure you want to create '" + folderName + "' from template '" + template + "'?",
-            name: "confirmed",
-            default: true
-        }])
-        .then((answers) => {
-            if (answers.confirmed) {
-                return finalize()
-            }
-            return false;
-        })
+const TEMPLATES = {
+  components: {
+    template: './templates/components.js',
+    dest: './src/components/'
+  },
+  elements: {
+    template: './templates/elements.js',
+    dest: './src/elements/'
+  },
+  feature: {
+    template: './templates/feature/',
+    dest: './src/features/'
+  },
+  service: {
+    template: './templates/service.js',
+    folder: './src/services/'
+  }
+}
 
-function finalize() {
-    copy(templatesPath, destinationPath, {clean: false})
-        .then(files => {
-            console.log('Files Coped to: ', destinationPath)
-            console.log(files)
-        }).catch(err => {
-            console.log(err.stack)
-        })
-    return true
+
+function myParseInt(value) {
+  return parseInt(value, 10)
+}
+
+function newProject() {
+
+  fs.mkdir(answers.name, { recursive: true }, (err) => {
+    if (err) throw err
+  })
+
+  copy('./templates', `./${packgeFolderName}`)
+  //fs.writeFileSync('./' + answers.name + '/package.json', JSON.stringify(package, null, 4))
+
 }

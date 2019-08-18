@@ -27,7 +27,7 @@ program
   .action((type) => {
     type = type.toLowerCase()
     if(ALLOWED_TYPES.includes(type)) {
-      console.log("Hello", type)
+      Logging.error(type, 'not yet implemented')
     } else {
       Logging.error(`Allowed types are: ${ALLOWED_TYPES.join(', ')}`)
     }
