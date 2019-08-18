@@ -44,23 +44,23 @@ program
   })
 
 program
-  .command("new <projectName>")
+  .command("new <projectFolderName>")
   .option('-i, --i18n', 'Internationalize the new project')
   .option('-p, --port <number>', 'integer argument', myParseInt, 9000)
   .alias('n')
   .description('Generate a new folder for the project')
-  .action((projectName, options) => {
+  .action((projectFolderName, options) => {
     //newProject()
-    console.log("init", projectName, options.i18n, options.port)
+    console.log("init", projectFolderName, options.i18n, options.port)
   })
   .on('--help',() => {
     console.log('')
     console.log('Examples:')
     console.log('')
-    Logging.success('  $ hingejs new <projectName>')
-    Logging.success('  $ hingejs new <projectName> --i18n')
-    Logging.success('  $ hingejs new <projectName> --port 7500')
-    Logging.success('  $ hingejs new <projectName> --i18n --port 7500')
+    Logging.success('  $ hingejs new <projectFolderName>')
+    Logging.success('  $ hingejs new <projectFolderName> --i18n')
+    Logging.success('  $ hingejs new <projectFolderName> --port 7500')
+    Logging.success('  $ hingejs new <projectFolderName> --i18n --port 7500')
   })
 
 program.parse(process.argv)
