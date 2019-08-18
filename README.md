@@ -14,6 +14,8 @@ $ npm install @hingejs/generator -g
 
 ## Generate Project
 
+> Please note:  You can always Internationalize you application but it is recommended to do this from the beginning rather than updating during development. This CLI will not be able to do that for you so choose carefully from the start.
+
 New project
 
 ```sh
@@ -84,7 +86,7 @@ $ hingejs g f
 $ hingejs g s
 ```
 
-Options
+Types
 
 | Command  | ShortCut | Description |
 |:---------:|:---------:|:---------:|
