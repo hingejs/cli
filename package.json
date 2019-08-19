@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "commander": "^2.11.0",
-    "file-system": "^2.2.2",
     "graceful-copy": "^1.1.0",
-    "inquirer": "^3.3.0"
+    "inquirer": "^3.3.0",
+    "replace-in-file": "^4.1.3"
   }
 }

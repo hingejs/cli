@@ -2,16 +2,27 @@
 
 const copy = require('graceful-copy')
 const inquirer = require('inquirer')
-const path = require('path')
+const {resolve} = require('path')
 const program = require('commander')
-const fs = require("file-system")
+const fsp = require('fs/promises')
 const { version } = require('./package.json')
 const ALLOWED_TYPES = ['component', 'c', 'element', 'e', 'feature', 'f', 'service', 's']
 const Logging = require('./logging')
 
+const TYPE_VALUES = {
+  c: 'component',
+  e: 'element',
+  f: 'feature',
+  s: 'service'
+}
+
+const VALID_CUSTOM_ELEMENT_NAME = /^[a-z]{1}[a-z0-9]*-[a-z0-9]+$/
+const VALID_FOLDER_NAME = /^[a-z]+$/
+const VALID_SERVICE_NAME = /^[A-Za-z]+$/
+
 program
   .version(version)
-  .usage('<command> [options]')
+  .usage('<command> <type/name> [options]')
   .on('--help', () => {
     console.log('')
     Logging.info('More command info:')
@@ -21,13 +32,29 @@ program
   })
 
 program
-  .command('generate <type>')
+  .command('generate <type> <name>')
   .alias('g')
   .description('Generate a new [component|element|feature|service] template')
-  .action((type) => {
-    type = type.toLowerCase()
+  .action((type, name) => {
+    type = type.toLowerCase().trim()
+    name = name.trim()
+    let validName = false
     if (ALLOWED_TYPES.includes(type)) {
-      Logging.error(type, 'not yet implemented')
+      type = TYPE_VALUES[type] || type
+      if (['component', 'element'].includes(type)) {
+        validName = VALID_CUSTOM_ELEMENT_NAME.test(name)
+      }
+      if (['feature'].includes(type)) {
+        validName = VALID_FOLDER_NAME.test(name)
+      }
+      if (['service'].includes(type)) {
+        validName = VALID_SERVICE_NAME.test(name)
+      }
+      if (!validName) {
+        Logging.error(name, 'is not valid to generate a type of', type)
+      } else {
+        generateType(type, name)
+      }
     } else {
       Logging.error(`Allowed types are: ${ALLOWED_TYPES.join(', ')}`)
     }
@@ -50,8 +77,12 @@ program
   .alias('n')
   .description('Generate a new folder for the project')
   .action((projectFolderName, options) => {
-    //newProject()
-    console.log("init", projectFolderName, options.i18n, options.port)
+    projectFolderName = projectFolderName.trim()
+    if (VALID_FOLDER_NAME.test(projectFolderName)) {
+      newProject(projectFolderName, options)
+    } else {
+      Logging.error(projectFolderName, 'is not valid name')
+    }
   })
   .on('--help', () => {
     console.log('')
@@ -81,7 +112,8 @@ const TEMPLATES = {
   service: {
     template: './templates/service.js',
     folder: './src/services/'
-  }
+  },
+  scaffold: './templates/scaffold'
 }
 
 
@@ -89,13 +121,25 @@ function myParseInt(value) {
   return parseInt(value, 10)
 }
 
-function newProject() {
+async function newProject(projectFolderName, options) {
+  console.log(projectFolderName)
+  //options.i18n, options.port
 
-  fs.mkdir(answers.name, { recursive: true }, (err) => {
-    if (err) throw err
+  await fsp.mkdir(projectFolderName, { recursive: true })
+    .catch((err) => {
+      Logging.error(projectFolderName, 'folder could not be created')
+      if (err) throw err
+    })
+
+  copy(resolve(__dirname, TEMPLATES.scaffold), resolve(__dirname, projectFolderName))
+  .then(files => {
+    Logging.success('Files have been copied to', projectFolderName)
+  }).catch(err => {
+    Logging.error(err.stack)
   })
 
-  copy('./templates', `./${packgeFolderName}`)
-  //fs.writeFileSync('./' + answers.name + '/package.json', JSON.stringify(package, null, 4))
+}
 
+function generateType(type, name) {
+  Logging.error(type, 'not yet implemented')
 }
