@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "commander": "^2.11.0",
-    "graceful-copy": "^1.1.0",
+    "fs-extra": "^8.1.0",
     "inquirer": "^3.3.0",
     "replace-in-file": "^4.1.3"
   }

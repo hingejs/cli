@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const copy = require('graceful-copy')
+
+const { copy, mkdir } = require('fs-extra')
+const { resolve } = require('path')
 const inquirer = require('inquirer')
-const {resolve} = require('path')
 const program = require('commander')
-const fsp = require('fs/promises')
 const { version } = require('./package.json')
 const ALLOWED_TYPES = ['component', 'c', 'element', 'e', 'feature', 'f', 'service', 's']
 const Logging = require('./logging')
@@ -113,7 +113,7 @@ const TEMPLATES = {
     template: './templates/service.js',
     folder: './src/services/'
   },
-  scaffold: './templates/scaffold'
+  scaffold: './templates/scaffold/'
 }
 
 
@@ -125,18 +125,13 @@ async function newProject(projectFolderName, options) {
   console.log(projectFolderName)
   //options.i18n, options.port
 
-  await fsp.mkdir(projectFolderName, { recursive: true })
-    .catch((err) => {
-      Logging.error(projectFolderName, 'folder could not be created')
-      if (err) throw err
-    })
-
-  copy(resolve(__dirname, TEMPLATES.scaffold), resolve(__dirname, projectFolderName))
-  .then(files => {
+  try {
+    await mkdir(projectFolderName, { recursive: true })
+    await copy(resolve(__dirname, TEMPLATES.scaffold), resolve(__dirname, projectFolderName))
     Logging.success('Files have been copied to', projectFolderName)
-  }).catch(err => {
-    Logging.error(err.stack)
-  })
+  } catch (err) {
+    Logging.error(err)
+  }
 
 }
 
