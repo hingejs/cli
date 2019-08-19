@@ -5,7 +5,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "scripts": {
-    "start": "node serve.js --port 7600"
+    "start": "node serve.js --port 9000"
   },
   "dependencies": {
     "express": "^4.16.4"

@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 
 
-const { copy, mkdir } = require('fs-extra')
+const { copy, mkdir, writeFile } = require('fs-extra')
 const { resolve } = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
+const replace = require('replace-in-file')
 const { version } = require('./package.json')
 const ALLOWED_TYPES = ['component', 'c', 'element', 'e', 'feature', 'f', 'service', 's']
 const Logging = require('./logging')
+
+var cp = require('child_process')
+var os = require('os')
 
 const TYPE_VALUES = {
   c: 'component',
@@ -124,11 +128,20 @@ function myParseInt(value) {
 async function newProject(projectFolderName, options) {
   console.log(projectFolderName)
   //options.i18n, options.port
-
+  const destFolder = resolve(__dirname, projectFolderName)
   try {
     await mkdir(projectFolderName, { recursive: true })
-    await copy(resolve(__dirname, TEMPLATES.scaffold), resolve(__dirname, projectFolderName))
+    await copy(resolve(__dirname, TEMPLATES.scaffold), destFolder)
+    await writeFile(`${destFolder}/.env`, `UI_APP_PORT=${options.port}`)
+
+    // npm binary based on OS
+    const npmCmd = os.platform().startsWith('win') ? 'npm.cmd' : 'npm'
+
+    // install folder
+    cp.spawn(npmCmd, ['i'], { env: process.env, cwd: destFolder, stdio: 'inherit' })
+
     Logging.success('Files have been copied to', projectFolderName)
+    Logging.info('Running npm install in', projectFolderName)
   } catch (err) {
     Logging.error(err)
   }
