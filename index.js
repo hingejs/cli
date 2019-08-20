@@ -2,6 +2,7 @@
 
 
 const { copy, mkdir, writeFile } = require('fs-extra')
+const { resolve } = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
 const replace = require('replace-in-file')
@@ -125,11 +126,10 @@ function myParseInt(value) {
 }
 
 async function newProject(projectFolderName, options) {
-  console.log(projectFolderName)
   //options.i18n, options.port
   try {
     await mkdir(projectFolderName, { recursive: true })
-    await copy(TEMPLATES.scaffold, projectFolderName)
+    await copy(resolve(__dirname, TEMPLATES.scaffold), projectFolderName)
     await writeFile(`${projectFolderName}/.env`, `UI_APP_PORT=${options.port}`)
 
     // npm binary based on OS
