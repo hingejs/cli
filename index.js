@@ -20,7 +20,7 @@ const TYPE_VALUES = {
   s: 'service'
 }
 
-const VALID_CUSTOM_ELEMENT_NAME = /^[a-z]{1}[a-z0-9]*-[a-z0-9]+$/
+const VALID_CUSTOM_ELEMENT_NAME = /(?=.*[-])^[a-z]{1}[a-z0-9]*[a-z0-9-]*[a-z0-9]$/
 const VALID_FOLDER_NAME = /^[a-z]+$/
 const VALID_SERVICE_NAME = /^[A-Za-z]+$/
 
