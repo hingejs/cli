@@ -4,8 +4,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { resolve } = require('path')
-// const NODE_MODULES_PATH = resolve(__dirname, './node_modules')
-// const package = require('./package.json');
 
 function transformContent(content) {
   const contentStr = content.toString('utf8')
@@ -29,7 +27,6 @@ module.exports = {
   },
   entry: {
     index: './src/main.js',
-    // vendor: Object.keys(package.dependencies)
   },
   externals: {
     environment: JSON.stringify(UI_ENV_VARS)
@@ -39,7 +36,7 @@ module.exports = {
     path: resolve(__dirname, 'dist')
   },
   plugins: [
-    new Dotenv({path: resolve(__dirname, '.', '.env')}),
+    new Dotenv({ path: resolve(__dirname, '.', '.env') }),
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       chunks: ['vendor', 'index'],
@@ -49,13 +46,18 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       { from: './assets', ignore: ['*.js'], to: 'assets' },
-      { from: './src/*.css', to: 'css/[name].[ext]' },
+      { from: './src/css/*.css', to: 'css/[name].[ext]' },
       { from: 'serve.template.js', to: 'serve.js', transform: transformContent },
       { from: 'package.template.json', to: 'package.json', transform: transformContent },
       { from: 'LICENSE', to: 'LICENSE' },
-      { from: './locales', ignore: ['*.js'], to: 'locales' },
+      //{ from: './locales', ignore: ['*.js'], to: 'locales' },
     ])
   ],
-  resolve: { extensions: ['.js'] },
+  resolve: {
+    alias: {
+      services: resolve(__dirname, 'src/services')
+    },
+    extensions: ['.js']
+  },
   watch: false
 }

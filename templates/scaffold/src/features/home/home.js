@@ -1,7 +1,5 @@
-import {
-  HtmlCache,
-  RouterService
-} from '../../../services/index.js'
+import { HtmlCache } from 'services/index.js'
+import { Router } from '@hingejs/services'
 
 const RouteCtrl = async (req, next) => {
   const $routeDisplay = document.querySelector('route-display')
@@ -9,5 +7,5 @@ const RouteCtrl = async (req, next) => {
   next()
 }
 
-RouterService
+Router
   .defaultPath('/home', RouteCtrl)

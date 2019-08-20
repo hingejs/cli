@@ -1,7 +1,5 @@
 import { EndPoints } from './endpoints.js'
-import HttpFetch from './http-fetch.js'
-import Observable from './observable.js'
-
+import { HttpFetch, Observable } from '@hingejs/services'
 
 class TemplateService extends Observable {
 
