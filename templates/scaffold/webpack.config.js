@@ -49,7 +49,7 @@ module.exports = {
       { from: './src/css/*.css', to: 'css/[name].[ext]' },
       { from: 'serve.template.js', to: 'serve.js', transform: transformContent },
       { from: 'package.template.json', to: 'package.json', transform: transformContent },
-      { from: 'LICENSE', to: 'LICENSE' },
+      { from: 'LICENSE.md', to: 'LICENSE.md' },
       //{ from: './locales', ignore: ['*.js'], to: 'locales' },
     ])
   ],
