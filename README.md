@@ -57,6 +57,13 @@ $ hingejs new test --port 7500
 $ hingejs new test --i18n --port 7500
 ```
 
+Once generated you can run the following command to start the project
+> You can refer to the project README.md file
+```sh
+$ cd <projectFolderName>
+$ npm start
+```
+
 ## Generate Files
 
 

@@ -131,6 +131,7 @@ async function newProject(projectFolderName, options) {
     await mkdir(projectFolderName, { recursive: true })
     await copy(resolve(__dirname, TEMPLATES.scaffold), projectFolderName)
     await writeFile(`${projectFolderName}/.env`, `UI_APP_PORT=${options.port}`)
+    await mkdir(`${projectFolderName}/src/templates`, { recursive: true })
 
     // npm binary based on OS
     const npmCmd = os.platform().startsWith('win') ? 'npm.cmd' : 'npm'
