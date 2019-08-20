@@ -15,6 +15,15 @@
     "web components",
     "web-components"
   ],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/hingejs/generator/issues"
+  },
+  "homepage": "https://github.com/hingejs/generator#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hingejs/generator.git"
+  },
   "bin": {
     "hingejs": "index.js"
   },
