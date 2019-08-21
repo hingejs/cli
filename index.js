@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 
-const { copy, mkdir, writeFile } = require('fs-extra')
+const { appendFile, copy, mkdir, writeFile } = require('fs-extra')
 const { resolve } = require('path')
 const inquirer = require('inquirer')
 const program = require('commander')
@@ -139,6 +139,31 @@ async function newProject(projectFolderName, options) {
     // install folder
     cp.spawn(npmCmd, ['i'], { env: process.env, cwd: projectFolderName, stdio: 'inherit' })
 
+
+    if(options.i18n) {
+      await mkdir(`${projectFolderName}/assets/locales`, { recursive: true })
+      const enJSON = {
+          "global|header": "This is the home page",
+      }
+      await writeFile(`${projectFolderName}/assets/locales/en.json`, JSON.stringify(enJSON, undefined, 2))
+      const homeHTML = `
+      <template>
+        <h1 data-i18n="global|header"></h1>
+      </template>
+
+      <style>
+        h1 {
+          color: red;
+        }
+      </style>
+      `.trim()
+      await writeFile(`${projectFolderName}/src/features/home/home.html`, homeHTML)
+      const mainJS = `
+        import { I18n } from '@hingejs/services'
+        I18n.enableDocumentObserver()
+      `.trim()
+      await appendFile(`${projectFolderName}/src/main.js`, mainJS, 'utf8');
+    }
     Logging.success('Files have been copied to', projectFolderName)
     Logging.info('Running npm install in', projectFolderName)
   } catch (err) {
