@@ -1,4 +1,5 @@
 const express = require('express')
+const helmet = require('helmet')
 const app = express()
 const port = process.env.UI_APP_PORT || 9000
 const root = __dirname
@@ -9,6 +10,7 @@ const fallback = (...pathOptions) => (req, res, next) => {
   } else next()
 }
 
+app.use(helmet())
 app.use(express.static(root))
 app.use(fallback('index.html', { root }))
 
