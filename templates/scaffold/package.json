@@ -9,8 +9,8 @@
     "lint:css": "./node_modules/.bin/stylelint './src/**/*.css' .'/src/**/*.html'",
     "lint": "npm run lint:css && npm run lint:js",
     "build:cache": "node html-cache.build.js",
-    "build:release": "npm run build:cache && webpack --mode production --config webpack.config.js",
-    "build:beta": "npm run build:cache && webpack --mode development --config webpack.config.js",
+    "build:release": "npm run build:cache && node_modules/.bin/webpack --mode production --config webpack.config.js",
+    "build:beta": "npm run build:cache && node_modules/.bin/webpack --mode development --config webpack.config.js",
     "start": "./node_modules/.bin/nodemon html-cache.build.js & ./node_modules/.bin/webpack-dev-server --mode development --config webpack.config.js",
     "serve": "npm run build:beta && node dist/serve.js",
     "test": "npm run build:cache && ./node_modules/.bin/karma start test/karma.conf.js"
