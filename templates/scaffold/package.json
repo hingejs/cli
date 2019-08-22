@@ -61,7 +61,7 @@
     "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
-    "@hingejs/services": "^0.0.8",
+    "@hingejs/services": "^0.0.13",
     "@hingejs/webcomponents": "^0.0.5"
   }
 }

@@ -50,7 +50,6 @@ module.exports = {
       { from: 'serve.template.js', to: 'serve.js', transform: transformContent },
       { from: 'package.template.json', to: 'package.json', transform: transformContent },
       { from: 'LICENSE.md', to: 'LICENSE.md' },
-      //{ from: './locales', ignore: ['*.js'], to: 'locales' },
     ])
   ],
   resolve: {
