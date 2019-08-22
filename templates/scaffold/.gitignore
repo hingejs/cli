@@ -5,6 +5,7 @@
 .env
 .envrc
 .idea
+.npmrc
 .project
 .settings
 .tmproj

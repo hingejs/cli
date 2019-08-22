@@ -4,6 +4,9 @@ Command line interface
 
 Simple Single Page Application and code generator
 
+- https://github.com/hingejs/services#readme
+- https://github.com/hingejs/webcomponents#readme
+
 ## Installation
 
 Install this package globally
