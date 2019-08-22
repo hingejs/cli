@@ -143,7 +143,7 @@ async function newProject(projectFolderName, options) {
     if(options.i18n) {
       await mkdir(`${projectFolderName}/assets/locales`, { recursive: true })
       const enJSON = {
-          "global:header": "This is the home page",
+          "global:header": "This is the home page"
       }
       await writeFile(`${projectFolderName}/assets/locales/en.json`, JSON.stringify(enJSON, undefined, 2))
       const homeHTML = `
