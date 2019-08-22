@@ -133,11 +133,6 @@ async function newProject(projectFolderName, options) {
     await writeFile(`${projectFolderName}/.env`, `UI_APP_PORT=${options.port}`)
     await mkdir(`${projectFolderName}/src/templates`, { recursive: true })
 
-    // npm binary based on OS
-    const npmCmd = os.platform().startsWith('win') ? 'npm.cmd' : 'npm'
-    // install folder
-    cp.spawn(npmCmd, ['i'], { env: process.env, cwd: projectFolderName, stdio: 'inherit' })
-
     if(options.i18n) {
       await mkdir(`${projectFolderName}/assets/locales`, { recursive: true })
       const enJSON = {
@@ -183,6 +178,12 @@ window.customElements.define('translate-locale', class extends HTMLElement {
       await writeFile(`${projectFolderName}/src/components/translate-locale.js`, componentHTML)
       await appendFile(`${projectFolderName}/src/components/index.js`, `import './translate-locale.js'\n`, 'utf8')
     }
+
+    // npm binary based on OS
+    const npmCmd = os.platform().startsWith('win') ? 'npm.cmd' : 'npm'
+    // install folder
+    cp.spawn(npmCmd, ['i'], { env: process.env, cwd: projectFolderName, stdio: 'inherit' })
+
     Logging.success('Files have been copied to', projectFolderName)
     Logging.info('Running npm install in', projectFolderName)
   } catch (err) {
