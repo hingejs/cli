@@ -135,10 +135,8 @@ async function newProject(projectFolderName, options) {
 
     // npm binary based on OS
     const npmCmd = os.platform().startsWith('win') ? 'npm.cmd' : 'npm'
-
     // install folder
     cp.spawn(npmCmd, ['i'], { env: process.env, cwd: projectFolderName, stdio: 'inherit' })
-
 
     if(options.i18n) {
       await mkdir(`${projectFolderName}/assets/locales`, { recursive: true })
@@ -147,22 +145,43 @@ async function newProject(projectFolderName, options) {
       }
       await writeFile(`${projectFolderName}/assets/locales/en.json`, JSON.stringify(enJSON, undefined, 2))
       const homeHTML = `
-      <template>
-        <h1 data-i18n="global:header"></h1>
-      </template>
+<template>
+  <h1 data-i18n="global:header"></h1>
+</template>
 
-      <style>
-        h1 {
-          color: red;
-        }
-      </style>
-      `.trim()
+<style>
+  h1 {
+    color: red;
+  }
+</style>
+`.trimStart()
       await writeFile(`${projectFolderName}/src/features/home/home.html`, homeHTML)
       const mainJS = `
-        import { I18n } from '@hingejs/services'
-        I18n.enableDocumentObserver()
-      `.trim()
-      await appendFile(`${projectFolderName}/src/main.js`, mainJS, 'utf8');
+import { I18n } from '@hingejs/services'
+I18n.enableDocumentObserver()
+`.trimStart()
+      await appendFile(`${projectFolderName}/src/main.js`, mainJS, 'utf8')
+      const componentHTML = `import { I18n } from '@hingejs/services'
+
+window.customElements.define('translate-locale', class extends HTMLElement {
+
+  constructor() {
+    super()
+  }
+
+  async generateTemplate() {
+    const translate = await I18n.init()
+    return translate(this.innerText)
+  }
+
+  async connectedCallback() {
+    this.innerHTML = await this.generateTemplate()
+  }
+
+})
+`.trimStart()
+      await writeFile(`${projectFolderName}/src/components/translate-locale.js`, componentHTML)
+      await appendFile(`${projectFolderName}/src/components/index.js`, `import './translate-locale.js'\n`, 'utf8')
     }
     Logging.success('Files have been copied to', projectFolderName)
     Logging.info('Running npm install in', projectFolderName)
