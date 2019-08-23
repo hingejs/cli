@@ -11,18 +11,9 @@
     "build:cache": "node html-cache.build.js",
     "build:release": "npm run build:cache && node_modules/.bin/webpack --mode production --config webpack.config.js",
     "build:beta": "npm run build:cache && node_modules/.bin/webpack --mode development --config webpack.config.js",
-    "start": "./node_modules/.bin/nodemon html-cache.build.js & ./node_modules/.bin/webpack-dev-server --mode development --config webpack.config.js",
+    "start": "npm run build:cache && ./node_modules/.bin/webpack-dev-server --mode development --config webpack.config.js",
     "serve": "npm run build:beta && node dist/serve.js",
     "test": "npm run build:cache && ./node_modules/.bin/karma start test/karma.conf.js"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "src/"
-    ],
-    "env": {
-      "NODE_ENV": "development"
-    },
-    "ext": "htm,html"
   },
   "stylelint": {
     "extends": "stylelint-config-standard",
@@ -52,7 +43,6 @@
     "express": "^4.16.4",
     "helmet": "^3.20.0",
     "html-webpack-plugin": "^3.2.0",
-    "nodemon": "^1.18.5",
     "style-loader": "^0.23.1",
     "stylelint": "^9.6.0",
     "stylelint-config-standard": "^18.2.0",

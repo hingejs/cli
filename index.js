@@ -193,16 +193,100 @@ window.customElements.define('translate-locale', class extends HTMLElement {
 }
 
 async function generateType(type, name) {
-  Logging.error(type, 'not yet implemented', type)
 
   const path = `${ROOT_FOLDER}/src/${type}s`
   const exists = await pathExists(path)
 
   if(exists) {
-    Logging.success(`found ${path}`)
+    switch(type) {
+      case 'component':
+      await createComponent(name)
+      Logging.success(`Generated ${type} Files named ${name}`)
+      break
+      default:
+      Logging.error(type, 'not yet implemented')
+    }
+
   } else {
-    Logging.error(`issue finding ${path}`)
+    Logging.error(`Command must be in project directory. Could not find /src/${type}s.`)
+  }
+}
+
+
+async function createComponent(name) {
+  const componentFileJS = `
+import { HtmlCache } from 'services/index.js'
+import { ModelMixin } from '@hingejs/services'
+const Base = ModelMixin(HTMLElement)
+
+window.customElements.define('${name}', class extends ModelMixin {
+
+  constructor() {
+    super()
   }
 
-  //console.log(ROOT_FOLDER)
+  _generateTemplate() {
+    return HtmlCache.get('components/${name}.html')
+  }
+
+  connectedCallback() {
+    await this.htmlMarker.render(this, this._generateTemplate())
+  }
+
+  get defaultModel() {
+    return Object.assign(super.defaultModel, {
+      test: 'This is a value'
+    })
+  }
+
+  async onModelUpdate() {
+    await this.htmlMarker.updateModel(this.model)
+  }
+
+})
+`.trimStart()
+
+  const componentFileHTML = '<p>${test}</p>'
+  const componentFileSpec = `
+describe('${name}', () => {
+
+  let el
+  const elemTag = '${name}'
+  const expect = chai.expect
+
+  beforeEach(() => {
+    el = document.createElement(elemTag)
+    document.body.appendChild(el)
+  })
+
+  afterEach(() => {
+    document.body.removeChild(el)
+    el = null
+  })
+
+  describe('interface', () => {
+
+    it('should be defined', async () => {
+      const elem = document.querySelector(elemTag)
+      expect(elem).to.not.be.undefined
+      expect(window.customElements.get(elemTag)).to.not.be.undefined
+    })
+
+    it('should be an Element node ', async () => {
+      const elem = document.querySelector(elemTag)
+      expect(elem.nodeType).to.equal(Node.ELEMENT_NODE)
+    })
+
+  })
+
+
+})
+`.trimStart()
+
+  await writeFile(`${ROOT_FOLDER}/src/components/${name}.js`, componentHTML)
+  await appendFile(`${ROOT_FOLDER}/src/components/index.js`, `import './${name}.js'\n`, 'utf8')
+  await writeFile(`${ROOT_FOLDER}/src/templates/${name}.html`, componentFileHTML)
+  await writeFile(`${ROOT_FOLDER}/test/components/${name}.spec.js`, componentFileSpec)
+  await appendFile(`${ROOT_FOLDER}/test/components/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  return Promise.resolve()
 }
