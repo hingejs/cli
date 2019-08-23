@@ -201,7 +201,7 @@ async function generateType(type, name) {
   if(exists) {
     Logging.success(`found ${path}`)
   } else {
-    Logging.error(`issue finding /src/${type}s`)
+    Logging.error(`issue finding ${path}`)
   }
 
   //console.log(ROOT_FOLDER)
