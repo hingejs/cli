@@ -330,7 +330,7 @@ window.customElements.define('${name}', class extends HTMLElement {
   }
 
   _render() {
-    const message = this.getAttribute('data-msg)
+    const message = this.getAttribute('data-msg')
     if (message && message.length) {
       this.$p.innerHTML = message
     }
