@@ -560,10 +560,12 @@ class ${nameCapitalized} extends BaseService {
 }
 
 export default new ${nameCapitalized}()
-    `.trimStart()
+`.trimStart()
 
   await writeFile(`${ROOT_FOLDER}/src/services/${name}.js`, FileJS)
-  await appendFile(`${ROOT_FOLDER}/src/services/index.js`, `import ${nameCapitalized} from './${name}.js'\n`, 'utf8')
+
+  //TODO: need to fix import process for services
+  await appendFile(`${ROOT_FOLDER}/src/services/index.js`, `import ${nameCapitalized} from './${name}.js'`, 'utf8')
 
   const FileSpec = `
 import { ${nameCapitalized} } from '../../src/services/index.js'
