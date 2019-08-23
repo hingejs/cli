@@ -219,17 +219,17 @@ import { HtmlCache } from 'services/index.js'
 import { ModelMixin } from '@hingejs/services'
 const Base = ModelMixin(HTMLElement)
 
-window.customElements.define('${name}', class extends ModelMixin {
+window.customElements.define('${name}', class extends Base {
 
   constructor() {
     super()
   }
 
   _generateTemplate() {
-    return HtmlCache.get('components/${name}.html')
+    return HtmlCache.get('${name}.html')
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     await this.htmlMarker.render(this, this._generateTemplate())
   }
 
