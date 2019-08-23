@@ -113,7 +113,7 @@ function titleCase(string) {
   const words = string.split('-');
   let output =  '';
   words.forEach( word => {
-    output += word.charAt(0).toUpperCase() + words.slice(1)
+    output += word.charAt(0).toUpperCase() + word.slice(1)
   })
   return output;
 }
@@ -546,17 +546,15 @@ class ${nameCapitalized} extends BaseService {
         if (this._isNewPayload(payload)) {
           this._payload = payload
           this._mutatedPayload = await this._modelPayload(payload)
+          this.announcePayload()
         }
-        this.announcePayload()
       },
     })
   }
 
   /* async can be used for a promise.all etc. */
   async _modelPayload(payload) {
-    const id = msg.messageID
-    const title = msg.messageSummary
-    return {...msg, id, title}
+    return payload
   }
 
 }
