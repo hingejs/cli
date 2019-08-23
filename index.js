@@ -38,8 +38,9 @@ program
 program
   .command('generate <type> <name>')
   .alias('g')
+  .option('-s, --shadow', 'Shadow dom for element')
   .description('Generate a new [component|element|feature|service] template')
-  .action((type, name) => {
+  .action((type, name, options) => {
     type = type.toLowerCase().trim()
     name = name.trim()
     let validName = false
@@ -57,7 +58,7 @@ program
       if (!validName) {
         Logging.error(name, 'is not valid to generate a type of', type)
       } else {
-        generateType(type, name)
+        generateType(type, name, options)
       }
     } else {
       Logging.error(`Allowed types are: ${ALLOWED_TYPES.join(', ')}`)
@@ -100,26 +101,6 @@ program
 
 program.parse(process.argv)
 
-const TEMPLATES = {
-  components: {
-    template: './templates/components.js',
-    dest: './src/components/'
-  },
-  elements: {
-    template: './templates/elements.js',
-    dest: './src/elements/'
-  },
-  feature: {
-    template: './templates/feature/',
-    dest: './src/features/'
-  },
-  service: {
-    template: './templates/service.js',
-    folder: './src/services/'
-  },
-  scaffold: './templates/scaffold/'
-}
-
 
 function myParseInt(value) {
   return parseInt(value, 10)
@@ -127,9 +108,10 @@ function myParseInt(value) {
 
 async function newProject(projectFolderName, options) {
   //options.i18n, options.port
+  const SCAFFOLD = './templates/scaffold/'
   try {
     await mkdir(projectFolderName, { recursive: true })
-    await copy(resolve(__dirname, TEMPLATES.scaffold), projectFolderName)
+    await copy(resolve(__dirname, SCAFFOLD), projectFolderName)
     await writeFile(`${projectFolderName}/.env`, `UI_APP_PORT=${options.port}`)
     await mkdir(`${projectFolderName}/src/templates`, { recursive: true })
 
@@ -192,7 +174,7 @@ window.customElements.define('translate-locale', class extends HTMLElement {
 
 }
 
-async function generateType(type, name) {
+async function generateType(type, name, options) {
 
   const path = `${ROOT_FOLDER}/src/${type}s`
   const exists = await pathExists(path)
@@ -201,6 +183,14 @@ async function generateType(type, name) {
     switch(type) {
       case 'component':
       await createComponent(name)
+      Logging.success(`Generated ${type} Files named ${name}`)
+      break
+      case 'element':
+      if(options.shadow) {
+        await createElement_Shadow(name)
+      } else {
+        await createElement_NonShadow(name)
+      }
       Logging.success(`Generated ${type} Files named ${name}`)
       break
       default:
@@ -214,7 +204,7 @@ async function generateType(type, name) {
 
 
 async function createComponent(name) {
-  const componentFileJS = `
+  const FileJS = `
 import { HtmlCache } from 'services/index.js'
 import { ModelMixin } from '@hingejs/services'
 const Base = ModelMixin(HTMLElement)
@@ -246,8 +236,8 @@ window.customElements.define('${name}', class extends Base {
 })
 `.trimStart()
 
-  const componentFileHTML = '<p>${test}</p>'
-  const componentFileSpec = `
+  const FileHTML = '<p>${test}</p>'
+  const FileSpec = `
 describe('${name}', () => {
 
   let el
@@ -283,10 +273,297 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/components/${name}.js`, componentFileJS)
+  await writeFile(`${ROOT_FOLDER}/src/components/${name}.js`, FileJS)
   await appendFile(`${ROOT_FOLDER}/src/components/index.js`, `import './${name}.js'\n`, 'utf8')
-  await writeFile(`${ROOT_FOLDER}/src/templates/${name}.html`, componentFileHTML)
-  await writeFile(`${ROOT_FOLDER}/test/components/${name}.spec.js`, componentFileSpec)
+  await writeFile(`${ROOT_FOLDER}/src/templates/${name}.html`, FileHTML)
+  await writeFile(`${ROOT_FOLDER}/test/components/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/components/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
   return Promise.resolve()
+}
+
+
+async function createElement_NonShadow(name) {
+  const FileJS = `
+window.customElements.define('${name}', class extends HTMLElement {
+
+  constructor() {
+    super()
+  }
+
+  _generateTemplate() {
+    return \`
+      <p>My new element</p>
+    \`.trim()
+  }
+
+  _insertStyle() {
+    const style = \`
+    <style type="text/css" id="${name}-style">
+      ${name} p {
+        border: 1px solid var(--${name}-border-color, #111);
+        border-radius: 2px;
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>\`
+    const elem = document.head || this.parentElement || this
+    if (!elem.querySelector('#${name}-style')) {
+      elem.insertAdjacentHTML('afterbegin', style)
+    }
+  }
+
+  connectedCallback() {
+    this._insertStyle()
+    this.innerHTML = this._generateTemplate()
+    this.$p = this.querySelector('p')
+    this._render()
+  }
+
+  static get observedAttributes() {
+    return ['data-msg']
+  }
+
+  attributeChangedCallback(attr, oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._render()
+    }
+  }
+
+  _render() {
+    const message = this.getAttribute('data-msg)
+    if (message && message.length) {
+      this.$p.innerHTML = message
+    }
+  }
+
+})
+`.trimStart()
+
+  const FileSpec = `
+describe('${name}', () => {
+
+  let el
+  const elemTag = '${name}'
+  const expect = chai.expect
+
+  beforeEach(() => {
+    el = document.createElement(elemTag)
+    document.body.appendChild(el)
+  })
+
+  afterEach(() => {
+    document.body.removeChild(el)
+    el = null
+  })
+
+  describe('interface', () => {
+
+    it('should be defined', async () => {
+      const elem = document.querySelector(elemTag)
+      expect(elem).to.not.be.undefined
+      expect(window.customElements.get(elemTag)).to.not.be.undefined
+    })
+
+    it('should be an Element node ', async () => {
+      const elem = document.querySelector(elemTag)
+      expect(elem.nodeType).to.equal(Node.ELEMENT_NODE)
+    })
+
+  })
+
+  describe('element', () => {
+
+    it('should display a paragraph with text', async () => {
+      expect(el.$p.innerHTML).to.not.be.empty
+    })
+
+    it('should update a paragraph based on the data-msg attribute', async () => {
+      el.dataset.msg = 'updated message'
+      expect(el.$p).to.not.equal('updated message')
+    })
+
+  })
+
+})
+`.trimStart()
+
+  await writeFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
+  await appendFile(`${ROOT_FOLDER}/src/elements/index.js`, `import './${name}.js'\n`, 'utf8')
+
+  await writeFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
+  await appendFile(`${ROOT_FOLDER}/test/elements/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  return Promise.resolve()
+}
+
+
+async function createElement_Shadow(name) {
+  const FileJS = `
+window.customElements.define('${name}', class extends HTMLElement {
+
+  constructor() {
+    super()
+    const shadowRoot = this.attachShadow({ mode: 'open' })
+    shadowRoot.appendChild(this._generateTemplate().content.cloneNode(true))
+    this.$content = this.shadowRoot.querySelector('div.content')
+  }
+
+  _generateTemplate() {
+    const template = document.createElement('template')
+    template.innerHTML = \`
+      <style>
+        .content {
+          background-color: var(--background, transparent);
+        }
+      </style>
+      <div class="content">
+        <slot></slot>
+      </div>
+    \`
+    return template
+  }
+
+  connectedCallback() {
+    this._render()
+  }
+
+  static get observedAttributes() {
+    return ['data-active']
+  }
+
+  attributeChangedCallback(attr, oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._render()
+    }
+  }
+
+  _render() {
+    const isActive = this.getAttribute('data-active') === 'true'
+    this.$content.classList.toggle('active, isActive)
+  }
+
+})
+`.trimStart()
+
+  const FileSpec = `
+describe('${name}', () => {
+
+  let el
+  const elemTag = '${name}'
+  const expect = chai.expect
+
+  beforeEach(() => {
+    el = document.createElement(elemTag)
+    document.body.appendChild(el)
+  })
+
+  afterEach(() => {
+    document.body.removeChild(el)
+    el = null
+  })
+
+  describe('interface', () => {
+
+    it('should be defined', async () => {
+      const elem = document.querySelector(elemTag)
+      expect(elem).to.not.be.undefined
+      expect(window.customElements.get(elemTag)).to.not.be.undefined
+    })
+
+    it('should be an Element node ', async () => {
+      const elem = document.querySelector(elemTag)
+      expect(elem.nodeType).to.equal(Node.ELEMENT_NODE)
+    })
+
+  })
+
+  describe('element', () => {
+
+    it('should display a slot with html', async () => {
+      el.innerHTML = '<p>Adding to slot</p>'
+      expect(el.$content.innerHTML).to.not.be.empty
+    })
+
+    it('should add a class name based on the data-active attribute', async () => {
+      el.dataset.active = true
+      expect(el.classList.contains('active')).to.be.true
+    })
+
+  })
+
+})
+`.trimStart()
+
+  await writeFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
+  await appendFile(`${ROOT_FOLDER}/src/elements/index.js`, `import './${name}.js'\n`, 'utf8')
+
+  await writeFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
+  await appendFile(`${ROOT_FOLDER}/test/elements/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  return Promise.resolve()
+}
+
+
+
+
+async function createService(name) {
+  name = name.toLowerCase()
+  const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1) + 'Service'
+  const FileJS = `
+import { BaseService, HttpFetch } from '@hingejs/services'
+import { EndPoints } from 'services/index.js'
+class ${nameCapitalized} extends BaseService {
+
+  constructor() {
+    super()
+  }
+
+  getAll() {
+    const URL = EndPoints.Test // Must be a valid URL
+    new HttpFetch().get(URL).subscribe({
+      error: this.notifyError.bind(this),
+      next: async payload => {
+        if (this._isNewPayload(payload)) {
+          this._payload = payload
+          this._mutatedPayload = await this._modelPayload(payload)
+        }
+        this.announcePayload()
+      },
+    })
+  }
+
+  /* async can be used for a promise.all etc. */
+  async _modelPayload(payload) {
+    const id = msg.messageID
+    const title = msg.messageSummary
+    return {...msg, id, title}
+  }
+
+}
+
+export default new ${nameCapitalized}()
+    `.trimStart()
+
+  await writeFile(`${ROOT_FOLDER}/src/services/${name}.js`, FileJS)
+  await appendFile(`${ROOT_FOLDER}/src/services/index.js`, `import ${nameCapitalized} from './${name}.js'\n`, 'utf8')
+
+  const FileSpec = `
+import { ${nameCapitalized} } from '../../src/services/index.js'
+
+describe('${nameCapitalized}', () => {
+
+  const expect = chai.expect
+
+  afterEach(() => {
+    sinon.restore()
+  })
+
+  describe('functions', () => {
+
+  })
+
+})
+`.trimStart()
+
+  await writeFile(`${ROOT_FOLDER}/test/services/${name}.spec.js`, FileSpec)
+  await appendFile(`${ROOT_FOLDER}/test/services/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+
 }

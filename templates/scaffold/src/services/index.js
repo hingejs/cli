@@ -1,5 +1,9 @@
 import * as Util from './util.js'
+import { EndPoints } from './endpoints.js'
 import HtmlCache from './html-cache.js'
-import TemplateService from './template.service.js'
 
-export { HtmlCache, TemplateService, Util }
+export {
+  EndPoints,
+  HtmlCache,
+  Util
+}
