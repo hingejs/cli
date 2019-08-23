@@ -283,7 +283,7 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/components/${name}.js`, componentHTML)
+  await writeFile(`${ROOT_FOLDER}/src/components/${name}.js`, componentFileJS)
   await appendFile(`${ROOT_FOLDER}/src/components/index.js`, `import './${name}.js'\n`, 'utf8')
   await writeFile(`${ROOT_FOLDER}/src/templates/${name}.html`, componentFileHTML)
   await writeFile(`${ROOT_FOLDER}/test/components/${name}.spec.js`, componentFileSpec)
