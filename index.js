@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 
-const { appendFile, copy, mkdir, pathExists, writeFile } = require('fs-extra')
+const { appendFile, copy, existsSync, mkdir, pathExists, writeFile } = require('fs-extra')
 const { resolve } = require('path')
 const program = require('commander')
 const replace = require('replace-in-file')
@@ -40,14 +40,16 @@ program
   .alias('g')
   .option('-s, --shadow', 'Shadow dom for element')
   .description('Generate a new [component|element|feature|service] template')
-  .action((type, name, options) => {
+  .action(async (type, name, options) => {
     type = type.toLowerCase().trim()
     name = name.trim()
     let validName = false
+    let isDuplicate = false
     if (ALLOWED_TYPES.includes(type)) {
       type = TYPE_VALUES[type] || type
       if (['component', 'element'].includes(type)) {
         validName = VALID_CUSTOM_ELEMENT_NAME.test(name)
+        isDuplicate = await checkIfCustomElementExist(name)
       }
       if (['feature'].includes(type)) {
         validName = VALID_FOLDER_NAME.test(name)
@@ -57,6 +59,8 @@ program
       }
       if (!validName) {
         Logging.error(name, 'is not valid to generate a type of', type)
+      } else if (isDuplicate) {
+        Logging.error(name, 'already exist and cannot be duplicated',)
       } else {
         generateType(type, name, options)
       }
@@ -104,6 +108,14 @@ program.parse(process.argv)
 
 function myParseInt(value) {
   return parseInt(value, 10)
+}
+
+function checkIfCustomElementExist(name) {
+  return new Promise(function(resolve, reject) {
+    const hasComponent = existsSync(`${ROOT_FOLDER}/src/components/${name}.js`)
+    const hasElement = existsSync(`${ROOT_FOLDER}/src/elements/${name}.js`)
+    resolve(!!(hasComponent || hasElement))
+  })
 }
 
 async function newProject(projectFolderName, options) {
