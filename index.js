@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 const { appendFile, copy, existsSync, mkdir, pathExists, writeFile } = require('fs-extra')
 const { resolve } = require('path')
 const program = require('commander')
@@ -22,7 +21,7 @@ const TYPE_VALUES = {
 
 const VALID_CUSTOM_ELEMENT_NAME = /(?=.*[-])^[a-z]{1}[a-z0-9]*[a-z0-9-]*[a-z0-9]$/
 const VALID_FOLDER_NAME = /^[a-z]+$/
-const VALID_SERVICE_NAME = /^[A-Za-z]+$/
+const VALID_SERVICE_NAME = /^[a-z]{1}[a-z-]*[a-z]$/
 
 program
   .version(version)
@@ -110,6 +109,15 @@ function myParseInt(value) {
   return parseInt(value, 10)
 }
 
+function titleCase(string) {
+  const words = string.split('-');
+  let output =  '';
+  words.forEach( word => {
+    output += word.charAt(0).toUpperCase() + words.slice(1)
+  })
+  return output;
+}
+
 function checkIfCustomElementExist(name) {
   return new Promise(function(resolve, reject) {
     const hasComponent = existsSync(`${ROOT_FOLDER}/src/components/${name}.js`)
@@ -195,7 +203,7 @@ async function generateType(type, name, options) {
     switch(type) {
       case 'component':
       await createComponent(name)
-      Logging.success(`Generated ${type} Files named ${name}`)
+      Logging.success(`Generated ${type} File named ${name}`)
       break
       case 'element':
       if(options.shadow) {
@@ -203,7 +211,12 @@ async function generateType(type, name, options) {
       } else {
         await createElement_NonShadow(name)
       }
-      Logging.success(`Generated ${type} Files named ${name}`)
+      Logging.success(`Generated ${type} File named ${name}`)
+      break
+      case 'service':
+      await createService(name)
+      name = titleCase(name) + 'Service'
+      Logging.success(`Generated ${type} File named ${name}`)
       break
       default:
       Logging.error(type, 'not yet implemented')
@@ -513,12 +526,9 @@ describe('${name}', () => {
   return Promise.resolve()
 }
 
-
-
-
 async function createService(name) {
   name = name.toLowerCase()
-  const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1) + 'Service'
+  const nameCapitalized = titleCase(name) + 'Service'
   const FileJS = `
 import { BaseService, HttpFetch } from '@hingejs/services'
 import { EndPoints } from 'services/index.js'
@@ -577,5 +587,4 @@ describe('${nameCapitalized}', () => {
 
   await writeFile(`${ROOT_FOLDER}/test/services/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/services/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
-
 }

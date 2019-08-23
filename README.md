@@ -69,7 +69,6 @@ $ npm start
 
 ## Generate Files
 
-
 New template file
 
 ```sh
@@ -104,3 +103,27 @@ Types
 | element | e | Custom elements should be built dependency free to be used for any project |
 | feature | f | New route page for the application |
 | service | s | Singleton/Observable based services to manage business logic |
+
+Options
+
+| Command  | ShortCut | Description |
+|:---------:|:---------:|:---------:|
+| --shadow | -s | Shadow dom for element |
+
+### Generate File Names
+
+Component and Element
+  Follows rules for w3c custom elements.  must start with an alpha character.  Can be alpha-numeric, but must contain one hyphen(-).
+   > `tool-tip` to be used as `<tool-tip></tool-tip>`
+```sh
+$ hingejs generate component tool-tip
+```
+ 
+
+Services
+  Must be lowercase with hyphen's(-) to separate words.
+  > `todo` will become `TodoService`
+  > `to-do` will become `ToDoService`
+```sh
+$ hingejs generate service to-do
+```
