@@ -2,7 +2,7 @@ const { existsSync } = require('fs-extra')
 const { join, resolve } = require('path')
 
 function find() {
-  let root = resolve(__dirname)
+  let root = process.cwd()
   const IS_DIR_END = /^(\w:\\|\/)$/
 
   while (IS_DIR_END.test(root) === false) {
