@@ -2,7 +2,7 @@ const { readFile, readdir, stat, writeFile } = require('fs')
 const { parse, resolve, dirname, join } = require('path')
 const { promisify } = require('util')
 const FIND_DIR = [join('src', 'features'), join('src', 'templates')]
-const SAVE_DIR = 'src/services'
+const SAVE_DIR = join('src', 'services')
 
 const readFileProms = promisify(readFile)
 const readdirProms = promisify(readdir)
