@@ -11,9 +11,18 @@
     "build:cache": "node html-cache.build.js",
     "build:release": "npm run build:cache && node_modules/.bin/webpack --mode production --config webpack.config.js",
     "build:beta": "npm run build:cache && node_modules/.bin/webpack --mode development --config webpack.config.js",
-    "start": "npm run build:cache && ./node_modules/.bin/webpack-dev-server --mode development --config webpack.config.js",
+    "start": "./node_modules/.bin/nodemon html-cache.build.js & ./node_modules/.bin/webpack-dev-server --mode development --config webpack.config.js",
     "serve": "npm run build:beta && node dist/serve.js",
     "test": "npm run build:cache && ./node_modules/.bin/karma start test/karma.conf.js"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "htm,html"
   },
   "stylelint": {
     "extends": "stylelint-config-standard",
@@ -33,8 +42,8 @@
     }
   },
   "devDependencies": {
-    "clean-webpack-plugin": "^0.1.19",
     "chai": "^4.2.0",
+    "clean-webpack-plugin": "^0.1.19",
     "connect-history-api-fallback": "^1.5.0",
     "copy-webpack-plugin": "^4.5.4",
     "dotenv": "^6.2.0",
@@ -52,6 +61,7 @@
     "karma-sinon": "^1.0.5",
     "karma-webpack": "^3.0.5",
     "mocha": "^5.2.0",
+    "nodemon": "^1.19.1",
     "sinon": "^7.2.3",
     "stylelint": "^9.6.0",
     "stylelint-config-standard": "^18.2.0",
