@@ -22,9 +22,10 @@ async function main() {
   const caches = await Promise.all(FIND_DIR.map(async dir => {
     const files = await getFiles(dir)
     return await Promise.all(flatten(files).map(async file => {
+      const mainDirectory = dir.split('/').pop().trim()
       const directory = dirname(file).split(dir).pop().trim()
       const baseFile = parse(file).base.trim()
-      const cacheKey = `${directory}/${baseFile}`.replace(/^\/|\/$/g, '').replace("\\", '')
+      const cacheKey = `${mainDirectory}${directory}/${baseFile}`.replace(/^\/|\/$/g, '').replace("\\", '')
       const contents = await readFileProms(resolve(dir, file), 'utf8')
       return `HtmlCache.set('${cacheKey}', '${escapeHTMLContent(contents)}')`
     }))

@@ -226,7 +226,7 @@ window.customElements.define('${name}', class extends Base {
   }
 
   _generateTemplate() {
-    return HtmlCache.get('${name}.html')
+    return HtmlCache.get('templates/${name}.html')
   }
 
   async connectedCallback() {
