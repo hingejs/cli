@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 
-const { appendFile, copy, mkdir, writeFile } = require('fs-extra')
+const { appendFile, copy, mkdir, pathExists, writeFile } = require('fs-extra')
 const { resolve } = require('path')
-const inquirer = require('inquirer')
 const program = require('commander')
 const replace = require('replace-in-file')
 const { version } = require('./package.json')
 const ALLOWED_TYPES = ['component', 'c', 'element', 'e', 'feature', 'f', 'service', 's']
 const Logging = require('./logging')
+const ROOT_FOLDER = require('./root-folder')
 
 var cp = require('child_process')
 var os = require('os')
@@ -192,6 +192,17 @@ window.customElements.define('translate-locale', class extends HTMLElement {
 
 }
 
-function generateType(type, name) {
-  Logging.error(type, 'not yet implemented')
+async function generateType(type, name) {
+  Logging.error(type, 'not yet implemented', type)
+
+  const path = `${ROOT_FOLDER}/src/${type}s`
+  const exists = await pathExists(path)
+
+  if(exists) {
+    Logging.success(`found ${path}`)
+  } else {
+    Logging.error(`issue finding /src/${type}s`)
+  }
+
+  //console.log(ROOT_FOLDER)
 }

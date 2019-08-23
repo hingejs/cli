@@ -1,11 +1,20 @@
-const path = require('path')
-const appDir = path.dirname(require.main.filename)
-const Logging = require('./logging')
+const { existsSync } = require('fs-extra')
+const { join, resolve } = require('path')
 
-Logging.validation('validation', appDir)
-Logging.conclusion(appDir)
-Logging.error(appDir)
-Logging.warn(appDir)
-Logging.success(appDir)
-Logging.info(appDir)
-Logging.normal(appDir)
+function find() {
+  let root = resolve(__dirname)
+  const IS_DIR_END = /^(\w:\\|\/)$/
+
+  while (IS_DIR_END.test(root) === false) {
+    let file = join(root, 'package.json')
+    if (existsSync(file)) {
+      break
+    } else {
+      root = resolve(root, '..')
+    }
+  }
+
+  return IS_DIR_END.test(root) ? null : root
+}
+
+module.exports = find()
