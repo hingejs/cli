@@ -104,6 +104,7 @@ Types
 | feature | f | New route page for the application |
 | service | s | Singleton/Observable based services to manage business logic |
 
+
 Options
 
 | Command  | ShortCut | Description |
@@ -112,15 +113,14 @@ Options
 
 ### Generate File Names
 
-Component and Element
+#### Component and Elements
   Follows rules for w3c custom elements.  must start with an alpha character.  Can be alpha-numeric, but must contain one hyphen(-).
    > `tool-tip` to be used as `<tool-tip></tool-tip>`
 ```sh
 $ hingejs generate component tool-tip
 ```
  
-
-Services
+#### Services
   Must be lowercase with hyphen's(-) to separate words.
   > `todo` will become `TodoService`
   > `to-do` will become `ToDoService`
