@@ -463,7 +463,7 @@ window.customElements.define('${name}', class extends HTMLElement {
 
   _render() {
     const isActive = this.getAttribute('data-active') === 'true'
-    this.$content.classList.toggle('active, isActive)
+    this.$content.classList.toggle('active', isActive)
   }
 
 })
@@ -510,7 +510,7 @@ describe('${name}', () => {
 
     it('should add a class name based on the data-active attribute', async () => {
       el.dataset.active = true
-      expect(el.classList.contains('active')).to.be.true
+      expect(el.$content.classList.contains('active')).to.be.true
     })
 
   })
