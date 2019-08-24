@@ -1,9 +1,6 @@
 import * as Util from './util.js'
+export { Util }
 import { EndPoints } from './endpoints.js'
+export { EndPoints }
 import HtmlCache from './html-cache.js'
-
-export {
-  EndPoints,
-  HtmlCache,
-  Util
-}
+export { HtmlCache }
