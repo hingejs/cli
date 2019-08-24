@@ -4,8 +4,11 @@ Command line interface
 
 Simple Single Page Application and code generator
 
-- https://github.com/hingejs/services#readme
-- https://github.com/hingejs/webcomponents#readme
+This project generator creates a process to build web applications using web components in a single page application. The packaged services and custom elements are used to help make development easier.
+
+#### Related packages
+- https://www.npmjs.com/package/@hingejs/services
+- https://www.npmjs.com/package/@hingejs/webcomponents
 
 ## Installation
 
