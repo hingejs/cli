@@ -6,6 +6,8 @@ Simple Single Page Application and code generator
 
 This project generator creates a process to build web applications using web components in a single page application. The packaged services and custom elements are used to help make development easier.
 
+> Most of the features have been implemented. This is a work in progress until a 1.0.0 release.
+
 #### Related packages
 - https://www.npmjs.com/package/@hingejs/services
 - https://www.npmjs.com/package/@hingejs/webcomponents
