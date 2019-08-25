@@ -120,23 +120,31 @@ Options
 
 #### Component and Elements
   Follows rules for w3c custom elements.  must start with an alpha character.  Can be alpha-numeric, but must contain one hyphen(-).
+
    > `tool-tip` to be used as `<tool-tip></tool-tip>`
+   
 ```sh
 $ hingejs generate component tool-tip
 ```
  
 #### Services
   Must be lowercase with hyphen's(-) to separate words.
+
   > `todo` will become `TodoService`
+
   > `to-do` will become `ToDoService`
+
 ```sh
 $ hingejs generate service to-do
 ```
 
 #### Features
   Must be lowercase with directory separators(/).  This structure will be generated in the features folder.
+
   > `todo` will become `todo/todo.js`
+
   > `todo/home` will become `todo/home.js`
+
 ```sh
 $ hingejs generate feature todo/home
 ```
