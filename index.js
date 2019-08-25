@@ -635,5 +635,5 @@ const FileHTML = `
   await writeFile(`${ROOT_FOLDER}/src/features/${name}.js`, FileJS)
   await ensureFile(`${ROOT_FOLDER}/src/features/${name}.html`)
   await writeFile(`${ROOT_FOLDER}/src/features/${name}.html`, FileHTML)
-  await appendFile(`${ROOT_FOLDER}/src/features/index.js`, `import './${name}.js'`, 'utf8')
+  await appendFile(`${ROOT_FOLDER}/src/features/index.js`, `import './${name}.js'\n`, 'utf8')
 }
