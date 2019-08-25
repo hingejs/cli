@@ -132,3 +132,11 @@ $ hingejs generate component tool-tip
 ```sh
 $ hingejs generate service to-do
 ```
+
+#### Features
+  Must be lowercase with directory separators(/).  This structure will be generated in the features folder.
+  > `todo` will become `todo/todo.js`
+  > `todo/home` will become `todo/home.js`
+```sh
+$ hingejs generate feature todo/home
+```

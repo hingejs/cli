@@ -310,10 +310,10 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await ensureFile(`${ROOT_FOLDER}/src/components/${name}.js`, FileJS)
+  await writeFile(`${ROOT_FOLDER}/src/components/${name}.js`, FileJS)
   await appendFile(`${ROOT_FOLDER}/src/components/index.js`, `import './${name}.js'\n`, 'utf8')
-  await ensureFile(`${ROOT_FOLDER}/src/templates/${name}.html`, FileHTML)
-  await ensureFile(`${ROOT_FOLDER}/test/components/${name}.spec.js`, FileSpec)
+  await writeFile(`${ROOT_FOLDER}/src/templates/${name}.html`, FileHTML)
+  await writeFile(`${ROOT_FOLDER}/test/components/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/components/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
   return Promise.resolve()
 }
@@ -424,10 +424,10 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await ensureFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
+  await writeFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
   await appendFile(`${ROOT_FOLDER}/src/elements/index.js`, `import './${name}.js'\n`, 'utf8')
 
-  await ensureFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
+  await writeFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/elements/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
   return Promise.resolve()
 }
@@ -530,10 +530,10 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await ensureFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
+  await writeFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
   await appendFile(`${ROOT_FOLDER}/src/elements/index.js`, `import './${name}.js'\n`, 'utf8')
 
-  await ensureFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
+  await writeFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/elements/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
   return Promise.resolve()
 }
@@ -574,7 +574,7 @@ class ${nameCapitalized} extends BaseService {
 export default new ${nameCapitalized}()
 `.trimStart()
 
-  await ensureFile(`${ROOT_FOLDER}/src/services/${name}.js`, FileJS)
+  await writeFile(`${ROOT_FOLDER}/src/services/${name}.js`, FileJS)
   const importService = `import ${nameCapitalized} from './${name}.js'\nexport { ${nameCapitalized} }`
   await appendFile(`${ROOT_FOLDER}/src/services/index.js`, importService, 'utf8')
 
@@ -596,20 +596,22 @@ describe('${nameCapitalized}', () => {
 })
 `.trimStart()
 
-  await ensureFile(`${ROOT_FOLDER}/test/services/${name}.spec.js`, FileSpec)
+  await writeFile(`${ROOT_FOLDER}/test/services/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/services/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
 }
 
 async function createFeature(name) {
   name = adjustFolderPath(name)
-  const folderName = name.trim().split('/').pop()
+  if(name.trim().split('/').length === 1) {
+    name = `${name}/${name}`
+  }
   const FileJS = `
 import { HtmlCache } from 'services/index.js'
 import { Router } from '@hingejs/services'
 
 const RouteCtrl = async (req, next) => {
   const $routeDisplay = document.querySelector('route-display')
-  await $routeDisplay.insertContent(HtmlCache.get('features/${name}/${folderName}.html'))
+  await $routeDisplay.insertContent(HtmlCache.get('features/${name}.html'))
   next()
 }
 
@@ -619,7 +621,7 @@ Router
 
 const FileHTML = `
 <template>
-  <h1>This is the ${folderName} page</h1>
+  <h1>This is the ${name} page</h1>
 </template>
 
 <style>
@@ -629,7 +631,9 @@ const FileHTML = `
 </style>
 `.trimStart()
 
-  await ensureFile(`${ROOT_FOLDER}/src/features/${name}/${folderName}.js`, FileJS)
-  await ensureFile(`${ROOT_FOLDER}/src/features/${name}/${folderName}.html`, FileHTML)
-  await appendFile(`${ROOT_FOLDER}/src/features/index.js`, `import './${name}/${folderName}.js'`, 'utf8')
+  await ensureFile(`${ROOT_FOLDER}/src/features/${name}.js`)
+  await writeFile(`${ROOT_FOLDER}/src/features/${name}.js`, FileJS)
+  await ensureFile(`${ROOT_FOLDER}/src/features/${name}.html`)
+  await writeFile(`${ROOT_FOLDER}/src/features/${name}.html`, FileHTML)
+  await appendFile(`${ROOT_FOLDER}/src/features/index.js`, `import './${name}.js'`, 'utf8')
 }
