@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { appendFile, copy, existsSync, mkdir, pathExists, writeFile } = require('fs-extra')
+const { appendFile, copy, ensureFile, existsSync, mkdir, pathExists, writeFile } = require('fs-extra')
 const { resolve } = require('path')
 const program = require('commander')
 const replace = require('replace-in-file')
@@ -20,7 +20,7 @@ const TYPE_VALUES = {
 }
 
 const VALID_CUSTOM_ELEMENT_NAME = /(?=.*[-])^[a-z]{1}[a-z0-9]*[a-z0-9-]*[a-z0-9]$/
-const VALID_FOLDER_NAME = /^[a-z]+$/
+const VALID_FOLDER_NAME = /^[a-z]{1}[a-z\/]*$/
 const VALID_SERVICE_NAME = /^[a-z]{1}[a-z-]*[a-z]$/
 
 program
@@ -51,6 +51,7 @@ program
         isDuplicate = await checkIfCustomElementExist(name)
       }
       if (['feature'].includes(type)) {
+        name = adjustFolderPath(name)
         validName = VALID_FOLDER_NAME.test(name)
       }
       if (['service'].includes(type)) {
@@ -116,6 +117,13 @@ function titleCase(string) {
     output += word.charAt(0).toUpperCase() + word.slice(1)
   })
   return output;
+}
+
+function adjustFolderPath(path) {
+  return path ? path.trim().split('/')
+      .filter(pathName => pathName.length)
+      .map(pathName => pathName.toLowerCase())
+      .join('/') : ''
 }
 
 function checkIfCustomElementExist(name) {
@@ -218,6 +226,10 @@ async function generateType(type, name, options) {
       name = titleCase(name) + 'Service'
       Logging.success(`Generated ${type} File named ${name}`)
       break
+      case 'feature':
+      await createFeature(name)
+      Logging.success(`Generated ${type} Structure named ${name}`)
+      break
       default:
       Logging.error(type, 'not yet implemented')
     }
@@ -298,10 +310,10 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/components/${name}.js`, FileJS)
+  await ensureFile(`${ROOT_FOLDER}/src/components/${name}.js`, FileJS)
   await appendFile(`${ROOT_FOLDER}/src/components/index.js`, `import './${name}.js'\n`, 'utf8')
-  await writeFile(`${ROOT_FOLDER}/src/templates/${name}.html`, FileHTML)
-  await writeFile(`${ROOT_FOLDER}/test/components/${name}.spec.js`, FileSpec)
+  await ensureFile(`${ROOT_FOLDER}/src/templates/${name}.html`, FileHTML)
+  await ensureFile(`${ROOT_FOLDER}/test/components/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/components/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
   return Promise.resolve()
 }
@@ -412,10 +424,10 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
+  await ensureFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
   await appendFile(`${ROOT_FOLDER}/src/elements/index.js`, `import './${name}.js'\n`, 'utf8')
 
-  await writeFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
+  await ensureFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/elements/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
   return Promise.resolve()
 }
@@ -518,10 +530,10 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
+  await ensureFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
   await appendFile(`${ROOT_FOLDER}/src/elements/index.js`, `import './${name}.js'\n`, 'utf8')
 
-  await writeFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
+  await ensureFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/elements/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
   return Promise.resolve()
 }
@@ -562,7 +574,7 @@ class ${nameCapitalized} extends BaseService {
 export default new ${nameCapitalized}()
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/services/${name}.js`, FileJS)
+  await ensureFile(`${ROOT_FOLDER}/src/services/${name}.js`, FileJS)
   const importService = `import ${nameCapitalized} from './${name}.js'\nexport { ${nameCapitalized} }`
   await appendFile(`${ROOT_FOLDER}/src/services/index.js`, importService, 'utf8')
 
@@ -584,6 +596,40 @@ describe('${nameCapitalized}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/test/services/${name}.spec.js`, FileSpec)
+  await ensureFile(`${ROOT_FOLDER}/test/services/${name}.spec.js`, FileSpec)
   await appendFile(`${ROOT_FOLDER}/test/services/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+}
+
+async function createFeature(name) {
+  name = adjustFolderPath(name)
+  const folderName = name.trim().split('/').pop()
+  const FileJS = `
+import { HtmlCache } from 'services/index.js'
+import { Router } from '@hingejs/services'
+
+const RouteCtrl = async (req, next) => {
+  const $routeDisplay = document.querySelector('route-display')
+  await $routeDisplay.insertContent(HtmlCache.get('features/${name}/${folderName}.html'))
+  next()
+}
+
+Router
+  .setPath('${name}', RouteCtrl)
+`.trimStart()
+
+const FileHTML = `
+<template>
+  <h1>This is the ${folderName} page</h1>
+</template>
+
+<style>
+  h1 {
+    color: red;
+  }
+</style>
+`.trimStart()
+
+  await ensureFile(`${ROOT_FOLDER}/src/features/${name}/${folderName}.js`, FileJS)
+  await ensureFile(`${ROOT_FOLDER}/src/features/${name}/${folderName}.html`, FileHTML)
+  await appendFile(`${ROOT_FOLDER}/src/features/index.js`, `import './${name}/${folderName}.js'`, 'utf8')
 }

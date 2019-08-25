@@ -1,1 +1,0 @@
-import './templete.css'
