@@ -3,7 +3,6 @@
 const { appendFile, copy, ensureFile, existsSync, mkdir, pathExists, writeFile } = require('fs-extra')
 const { resolve } = require('path')
 const program = require('commander')
-const replace = require('replace-in-file')
 const { version } = require('./package.json')
 const ALLOWED_TYPES = ['component', 'c', 'element', 'e', 'feature', 'f', 'service', 's']
 const Logging = require('./logging')
