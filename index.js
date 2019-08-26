@@ -242,7 +242,7 @@ async function generateType(type, name, options) {
 
 async function createComponent(name) {
   const FileJS = `
-import { HtmlCache } from 'services/index.js'
+import { HtmlCache } from 'services'
 import { ModelMixin } from '@hingejs/services'
 const Base = ModelMixin(HTMLElement)
 
@@ -543,7 +543,7 @@ async function createService(name) {
   const nameCapitalized = titleCase(name) + 'Service'
   const FileJS = `
 import { BaseService, HttpFetch } from '@hingejs/services'
-import { EndPoints } from 'services/index.js'
+import { EndPoints } from 'services'
 class ${nameCapitalized} extends BaseService {
 
   constructor() {
@@ -606,7 +606,7 @@ async function createFeature(name) {
     name = `${name}/${name}`
   }
   const FileJS = `
-import { HtmlCache } from 'services/index.js'
+import { HtmlCache } from 'services'
 import { Router } from '@hingejs/services'
 
 const RouteCtrl = async (req, next) => {

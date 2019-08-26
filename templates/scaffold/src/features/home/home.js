@@ -1,4 +1,4 @@
-import { HtmlCache } from 'services/index.js'
+import { HtmlCache } from 'services'
 import { Router } from '@hingejs/services'
 
 const RouteCtrl = async (req, next) => {

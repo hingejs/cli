@@ -8,6 +8,9 @@ This project generator creates a process to build web applications using web com
 
 > Most of the features have been implemented. This is a work in progress until a 1.0.0 release.
 
+#### Wiki
+- https://github.com/hingejs/generator/wiki
+
 #### Related packages
 - https://www.npmjs.com/package/@hingejs/services
 - https://www.npmjs.com/package/@hingejs/webcomponents
@@ -122,7 +125,7 @@ Options
   Follows rules for w3c custom elements.  must start with an alpha character.  Can be alpha-numeric, but must contain one hyphen(-).
 
    > `tool-tip` to be used as `<tool-tip></tool-tip>`
-   
+
 ```sh
 $ hingejs generate component tool-tip
 ```
@@ -136,6 +139,12 @@ $ hingejs generate component tool-tip
 
 ```sh
 $ hingejs generate service to-do
+```
+
+Using a service in the application you can do the following.  Webpack is configured to resolve `'services'` as an alias to the correct path of `./src/services/index.js`.
+
+```js
+import { TodoService } from 'services'
 ```
 
 #### Features

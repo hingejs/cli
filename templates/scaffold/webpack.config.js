@@ -54,7 +54,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      services: resolve(__dirname, 'src/services')
+      services: resolve(__dirname, 'src/services/index.js')
     },
     extensions: ['.js']
   },
