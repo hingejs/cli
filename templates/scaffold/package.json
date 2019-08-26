@@ -46,7 +46,7 @@
     "clean-webpack-plugin": "^0.1.19",
     "connect-history-api-fallback": "^1.5.0",
     "copy-webpack-plugin": "^4.5.4",
-    "dotenv": "^6.2.0",
+    "dotenv-extended": "^2.4.0",
     "dotenv-webpack": "^1.7.0",
     "eslint": "^5.7.0",
     "express": "^4.16.4",
