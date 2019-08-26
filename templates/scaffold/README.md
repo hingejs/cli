@@ -79,7 +79,7 @@ $ npm run lint:css
 
 All test will be added to the `test` folder from the root directory.  Be sure to end all test files with `spec.js`.
 
-Karma and Mocha/Chai/Sinon
+Karma with Mocha/Chai/Sinon
 
 ```sh
 $ npm run test
@@ -93,7 +93,7 @@ Not yet implemented.  Possibly Puppeteer
 
 | IE / Edge | Firefox | Chrome | Safari | Opera | iOS | Android |
 |:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
-| &Chi; | &Chi; | &check; | &check; | &Chi; | &check; | &check;
+| &Chi; | &check; | &check; | &check; | &Chi; | &check; | &check;
 
 
 ## Fix server redirects
@@ -141,8 +141,9 @@ RewriteRule . /index.html [L]
 
 ```js
 const express = require('express')
+const helmet = require('helmet')
 const app = express()
-const port = process.env.port || 7600
+const port = process.env.UI_APP_PORT || 9000
 const root = __dirname
 
 const fallback = (...pathOptions) => (req, res, next) => {
@@ -151,13 +152,14 @@ const fallback = (...pathOptions) => (req, res, next) => {
   } else next()
 }
 
+app.use(helmet())
 app.use(express.static(root))
 app.use(fallback('index.html', { root }))
 
 let httpInstance = app.listen(port)
 
 process.on('SIGINT', () => {
-  console.log('gracefully shutting down')
+  console.log('\x1b[42m \u2713  \x1b[0m \x1b[32m Gracefully shutting down \x1b[0m')
   httpInstance.close()
   process.exit(0)
 })
