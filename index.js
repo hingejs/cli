@@ -609,7 +609,7 @@ import { HtmlCache } from 'services'
 import { Router } from '@hingejs/services'
 
 const RouteCtrl = async (req, next) => {
-  const $routeDisplay = document.querySelector('route-display')
+  const $routeDisplay = document.querySelector('h-route-display')
   await $routeDisplay.insertContent(HtmlCache.get('features/${name}.html'))
   req.exit(async () => {
     // remove if not needed

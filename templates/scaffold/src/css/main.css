@@ -61,12 +61,12 @@ section.main {
   padding: 2rem;
 }
 
-route-display {
+h-route-display {
   margin: 0 auto;
   height: 100%;
 }
 
-route-link {
+h-route-link {
   border: 1px solid #bdc3c7;
   border-radius: 2px;
   box-sizing: border-box;
@@ -77,7 +77,7 @@ route-link {
   padding: 0.8rem;
 }
 
-route-link:hover {
+h-route-link:hover {
   background-color: #f0f0f0;
   outline: none;
 }
