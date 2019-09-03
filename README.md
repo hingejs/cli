@@ -14,7 +14,7 @@ Technically it is not.  The libraries used in development have little to no depe
 
 This generator sets you up so you have the following features available to you faster.
 
-- Build process
+- Build/Bundle process
 - CSS/JS linting
 - Unit testing
 - Web dev server
