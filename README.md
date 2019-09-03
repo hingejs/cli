@@ -10,16 +10,19 @@ This project generator creates a process to build web applications using web com
 
 ### Is this just another framework?
 
-Technically it is not.  The libraries used in development have little to no dependencies.  Custom Elements allow you to build reusable components using plain JavaScript only.  Long gone are the days of having to copy HTML/CSS/JS and manually insert them for one piece of functionality.  This is now done in one file and used as a custom HTML tag, native to the browser.
+Technically it is not.  The libraries used in development have little to no dependencies.  Custom Elements allow you to build reusable web components using plain JavaScript only.  Long gone are the days of having to copy HTML/CSS/JS and manually insert them for one piece of functionality.  This is now done in one file and used as a custom HTML tag, native to the browser.
 
 This generator sets you up so you have the following features available to you faster.
 
 - Build/Bundle process
+- Routing
+- Services
+- Web component suite
 - CSS/JS linting
 - Unit testing
 - Web dev server
 - HTML cached templates
-- i18n translations
+- i18n translation process
 - Templates generated for rapid development
 
 #### Wiki
