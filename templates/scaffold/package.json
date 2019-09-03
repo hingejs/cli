@@ -7,7 +7,7 @@
   "scripts": {
     "lint:js": "./node_modules/.bin/eslint -c ./.eslintrc --ext .js ./src",
     "lint:css": "./node_modules/.bin/stylelint './src/**/*.css' .'/src/**/*.html'",
-    "lint": "./node_modules/.bin/run-p lint:css npm run lint:js",
+    "lint": "./node_modules/.bin/run-p lint:css lint:js",
     "build:cache": "node html-cache.build.js",
     "prebuild:beta": "npm run build:cache",
     "build:beta": "./node_modules/.bin/webpack --mode development --config webpack.config.js",
@@ -52,6 +52,7 @@
     "clean-webpack-plugin": "^0.1.19",
     "connect-history-api-fallback": "^1.5.0",
     "copy-webpack-plugin": "^4.5.4",
+    "cross-env": "^5.2.1",
     "dotenv-extended": "^2.4.0",
     "dotenv-webpack": "^1.7.0",
     "eslint": "^5.7.0",
