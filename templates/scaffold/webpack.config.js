@@ -21,7 +21,6 @@ module.exports = {
       ],
       verbose: true
     },
-    host: '0.0.0.0',
     open: true,
     port: process.env.UI_APP_PORT,
   },
