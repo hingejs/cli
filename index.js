@@ -134,11 +134,12 @@ function checkIfCustomElementExist(name) {
 }
 
 async function newProject(projectFolderName, options) {
-  //options.i18n, options.port
   const SCAFFOLD = './templates/scaffold/'
+  const gitIgnore = './templates/scaffold/.gitignore'
   try {
     await mkdir(projectFolderName, { recursive: true })
     await copy(resolve(__dirname, SCAFFOLD), projectFolderName)
+    await copy(resolve(__dirname, gitIgnore), `${projectFolderName}/.gitignore`)
     await writeFile(`${projectFolderName}/.env`, `UI_APP_PORT=${options.port}`)
     await mkdir(`${projectFolderName}/src/templates`, { recursive: true })
 
