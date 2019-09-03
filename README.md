@@ -1,14 +1,31 @@
 # &#8762; HingeJS - CLI Project Generator
 
-Command line interface
-
-Simple Single Page Application and code generator
-
-This project generator creates a process to build web applications using web components in a single page application. The packaged services and custom elements are used to help make development easier.
+Command line interface and Simple Single Page Application and code generator
 
 > Most of the features have been implemented. This is a work in progress until a 1.0.0 release.
 
+### What is this for?
+
+This project generator creates a process to build web applications using web components in a single page application. The packaged services and custom elements are used to help make development easier. You can use any services or other custom element libraries.
+
+### Is this just another framework?
+
+Technically it is not.  The libraries used in development have little to no dependencies.  Custom Elements allow you to build reusable components using plain JavaScript only.  Long gone are the days of having to copy HTML/CSS/JS and manually insert them for one piece of functionality.  This is now done in one file and used as a custom HTML tag, native to the browser.
+
+This generator sets you up so you have the following features available to you faster.
+
+- Build process
+- CSS/JS linting
+- Unit testing
+- Web dev server
+- HTML cached templates
+- i18n translations
+- Templates generated for rapid development
+
 #### Wiki
+
+For more information, tips and guides visit:
+
 - https://github.com/hingejs/generator/wiki
 
 #### Related packages
