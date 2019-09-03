@@ -79,6 +79,6 @@
   },
   "dependencies": {
     "@hingejs/services": "^0.0.20",
-    "@hingejs/webcomponents": "^0.0.8"
+    "@hingejs/webcomponents": "^0.0.9"
   }
 }
