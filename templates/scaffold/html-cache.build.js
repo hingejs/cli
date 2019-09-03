@@ -1,5 +1,5 @@
 const { readFile, readdir, stat, writeFile } = require('fs')
-const { parse, resolve, dirname, join } = require('path')
+const { parse, resolve, dirname, join, sep } = require('path')
 const { promisify } = require('util')
 const FIND_DIR = [join('src', 'features'), join('src', 'templates')]
 const SAVE_DIR = join('src', 'services')
@@ -22,10 +22,10 @@ async function main() {
   const caches = await Promise.all(FIND_DIR.map(async dir => {
     const files = await getFiles(dir)
     return await Promise.all(flatten(files).map(async file => {
-      const mainDirectory = dir.split('/').pop().trim()
+      const mainDirectory = dir.split(sep).pop().trim()
       const directory = dirname(file).split(dir).pop().trim()
       const baseFile = parse(file).base.trim()
-      const cacheKey = `${mainDirectory}${directory}/${baseFile}`.replace(/^\/|\/$/g, '').replace("\\", '')
+      const cacheKey = `${mainDirectory}${directory}${sep}${baseFile}`.replace(/^\/|\/$/g, '').split(sep).join('/')
       const contents = await readFileProms(resolve(dir, file), 'utf8')
       return `HtmlCache.set('${cacheKey}', '${escapeHTMLContent(contents)}')`
     }))
