@@ -5,6 +5,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "scripts": {
+    "serve": "node serve.js --port=9000",
     "start": "node serve.js --port=9000"
   },
   "dependencies": {
