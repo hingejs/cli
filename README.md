@@ -47,7 +47,7 @@ $ npm install @hingejs/generator -g
 
 ### Quick use guide
 
-1. Generate a project in a folder called test
+**Step 1** Generate a project in a folder called test
 
 ```sh
 $ hingejs new test
@@ -55,14 +55,14 @@ $ hingejs new test
 
 > Replace `test` with any folder name of your choosing
 
-2. Wait for the files to be copied and npm install to be completed
+**Step 2** Wait for the files to be copied and npm install to be completed
 
-3. Enter the new project folder 
+**Step 3** Enter the new project folder 
 ```sh
 $ cd test
 ```
 
-4. Run the command to start development
+**Step 4** Run the command to start development
 ```sh
 $ npm start
 ```
