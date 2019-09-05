@@ -19,7 +19,7 @@ const TYPE_VALUES = {
 }
 
 const VALID_CUSTOM_ELEMENT_NAME = /(?=.*[-])^[a-z]{1}[a-z0-9]*[a-z0-9-]*[a-z0-9]$/
-const VALID_FOLDER_NAME = /^[a-z]{1}[a-z0-9\/]*$/
+const VALID_FOLDER_NAME = /^[a-z]{1}[a-z0-9-_\/]*[a-z\/]$/
 const VALID_SERVICE_NAME = /^[a-z]{1}[a-z-]*[a-z]$/
 
 program
@@ -85,7 +85,7 @@ program
   .alias('n')
   .description('Generate a new folder for the project')
   .action((projectFolderName, options) => {
-    projectFolderName = projectFolderName.trim()
+    projectFolderName = projectFolderName.toLowerCase().trim()
     if (VALID_FOLDER_NAME.test(projectFolderName)) {
       newProject(projectFolderName, options)
     } else {

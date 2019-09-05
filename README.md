@@ -45,15 +45,37 @@ Install this package globally
 $ npm install @hingejs/generator -g
 ```
 
-## Generate Project
+### Quick use guide
 
-> Please note:  You can always Internationalize your application later but it is recommended to do this from the beginning rather than updating during development. This CLI will not be able to do that for you so choose carefully from the start.
+1. Generate a project in a folder called test
+
+```sh
+$ hingejs new test
+```
+
+> Replace `test` with any folder name of your choosing
+
+2. Wait for the files to be copied and npm install to be completed
+
+3. Enter the new project folder 
+```sh
+$ cd test
+```
+
+4. Run the command to start development
+```sh
+$ npm start
+```
+
+
+## Generate Project
 
 New project
 
 ```sh
 $ hingejs new <projectFolderName>
 ```
+> Folder name must be lowercase and allows for alpha-numeric, slashes(/), dashes(-) and underscores(_) characters.
 
 > Alias `n`
 
@@ -76,6 +98,8 @@ Options
 
 > Internationalization Info: https://developer.mozilla.org/en-US/docs/Glossary/I18N
 
+> Please note:  You can always Internationalize your application later but it is recommended to do this from the beginning rather than updating during development. This CLI will not be able to do that for you so choose carefully from the start.
+
 Examples:
 
 ```sh
@@ -90,39 +114,41 @@ $ hingejs new test --port 7500
 $ hingejs new test --i18n --port 7500
 ```
 
-Once generated you can run the following command to start the project
-> You can refer to the project README.md file
+**Once generated** you can run the following command to start the project
+
 ```sh
 $ cd <projectFolderName>
 $ npm start
 ```
+
+> You can refer to the <projectFolderName> `README.md` file
 
 ## Generate Files
 
 New template file
 
 ```sh
-$ hingejs generate <type>
+$ hingejs generate <type> <name>
 ```
 
 > Alias `g`
 
 ```sh
-$ hingejs g <type>
+$ hingejs g <type> <name>
 ```
 
 Examples:
 
 ```sh
-$ hingejs generate component
-$ hingejs generate element
-$ hingejs generate feature
-$ hingejs generate service
+$ hingejs generate component <name>
+$ hingejs generate element <name>
+$ hingejs generate feature <name>
+$ hingejs generate service <name>
 
-$ hingejs g c
-$ hingejs g e
-$ hingejs g f
-$ hingejs g s
+$ hingejs g c <name>
+$ hingejs g e <name>
+$ hingejs g f <name>
+$ hingejs g s <name>
 ```
 
 Types
@@ -141,27 +167,45 @@ Options
 |:---------:|:---------:|:---------:|
 | --shadow | -s | Shadow dom for element |
 
-### Generate File Names
+example of option
+
+```sh
+$ hingejs generate element tool-tip --shadow
+```
+
+the shortcut command route
+
+```sh
+$ hingejs g e tool-tip -s
+```
+
+
+### Generate Name Rules
 
 #### Component and Elements
-  Follows rules for w3c custom elements.  must start with an alpha character.  Can be alpha-numeric, but must contain one hyphen(-).
-
-   > `tool-tip` to be used as `<tool-tip></tool-tip>`
+Follows rules for w3c custom elements.  Must begin with an alpha character.  Can be alpha-numeric, but must contain one hyphen(-).
 
 ```sh
 $ hingejs generate component tool-tip
 ```
+**or**
+
+```sh
+$ hingejs generate element tool-tip
+```
+
+ > `tool-tip` to be used as `<tool-tip></tool-tip>`
  
 #### Services
   Must be lowercase with hyphen's(-) to separate words.
 
-  > `todo` will become `TodoService`
-
-  > `to-do` will become `ToDoService`
-
 ```sh
 $ hingejs generate service to-do
 ```
+
+  > `todo` will become `TodoService`
+
+  > `to-do` will become `ToDoService`
 
 Using a service in the application you can do the following.  Webpack is configured to resolve `'services'` as an alias to the correct path of `./src/services/index.js`.
 
@@ -172,10 +216,10 @@ import { TodoService } from 'services'
 #### Features
   Must be lowercase with directory separators(/).  This structure will be generated in the features folder.
 
-  > `todo` will become `todo/todo.js`
-
-  > `todo/home` will become `todo/home.js`
-
 ```sh
 $ hingejs generate feature todo/home
 ```
+
+  > `todo` will become `todo/todo.js`
+
+  > `todo/home` will become `todo/home.js`
