@@ -1,4 +1,4 @@
-const { readFile, readdir, stat, writeFile } = require('fs')
+const { lstatSync, existsSync, readFile, readdir, stat, writeFile } = require('fs')
 const { parse, resolve, dirname, join, sep } = require('path')
 const { promisify } = require('util')
 const FIND_DIR = [join('src', 'features'), join('src', 'templates')]
@@ -19,7 +19,9 @@ main().catch(error => {
 })
 
 async function main() {
-  const caches = await Promise.all(FIND_DIR.map(async dir => {
+  const caches = await Promise.all(FIND_DIR
+    .filter(path => existsSync(path) && lstatSync(path).isDirectory())
+    .map(async dir => {
     const files = await getFiles(dir)
     return await Promise.all(flatten(files).map(async file => {
       const mainDirectory = dir.split(sep).pop().trim()

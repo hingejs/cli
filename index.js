@@ -135,12 +135,54 @@ function checkIfCustomElementExist(name) {
 
 async function newProject(projectFolderName, options) {
   const SCAFFOLD = './templates/scaffold/'
-  const gitIgnore = './templates/scaffold/.gitignore'
+  const gitIgnoreText = `
+# IDE
+._*
+.cache
+.DS_Store
+.env
+.envrc
+.idea
+.npmrc
+.project
+.settings
+.tmproj
+*.esproj
+*.sublime-project
+*.sublime-workspace
+nbproject/
+Thumbs.db
+.vscode/*
+.vs/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# extensions
+*.diff
+*.err
+*.log
+*.orig
+*.rej
+*.swo
+*.swp
+*.tgz
+*.vi
+*.zip
+*~
+
+# Folders
+node_modules/
+coverage/
+dist/*
+jsdoc/
+`
   try {
     await mkdir(projectFolderName, { recursive: true })
     await copy(resolve(__dirname, SCAFFOLD), projectFolderName)
-    await copy(resolve(__dirname, gitIgnore), `${projectFolderName}/.gitignore`)
     await writeFile(`${projectFolderName}/.env`, `UI_APP_PORT=${options.port}`)
+    await writeFile(`${projectFolderName}/.gitignore`, gitIgnoreText)
     await mkdir(`${projectFolderName}/src/templates`, { recursive: true })
 
     if(options.i18n) {
