@@ -10,7 +10,7 @@ const writeFileProms = promisify(writeFile)
 const statProms = promisify(stat)
 
 function flatten(arrays) {
-  return [].concat.apply([], arrays)
+  return Array.isArray(arrays) ? [].concat.apply([], arrays) : []
 }
 
 main().catch(error => {
@@ -36,9 +36,12 @@ async function main() {
   html = html.concat(flatten(caches))
   html.push('export default HtmlCache')
 
-  await writeFileProms(resolve(SAVE_DIR, 'html-cache.js'), html.join('\n'))
-
-  console.log('\x1b[32m The file was saved! \x1b[0m')
+  if(existsSync(SAVE_DIR) && lstatSync(SAVE_DIR).isDirectory()) {
+    await writeFileProms(resolve(SAVE_DIR, 'html-cache.js'), html.join('\n'))
+    console.log('\x1b[32m The file was saved! \x1b[0m')
+  } else {
+    console.log(`\x1b[31m The file was NOT saved! ${SAVE_DIR} does not exist \x1b[0m`)
+  }
   process.exit(0)
 }
 

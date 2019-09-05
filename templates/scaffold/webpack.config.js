@@ -38,7 +38,7 @@ module.exports = {
     new Dotenv({ path: resolve(__dirname, '.', '.env') }),
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      chunks: ['vendor', 'index'],
+      chunks: ['index'],
       filename: './index.html',
       hash: true,
       template: './src/index.html',
