@@ -19,7 +19,7 @@ const TYPE_VALUES = {
 }
 
 const VALID_CUSTOM_ELEMENT_NAME = /(?=.*[-])^[a-z]{1}[a-z0-9]*[a-z0-9-]*[a-z0-9]$/
-const VALID_FOLDER_NAME = /^[a-z]{1}[a-z0-9-_\/]*[a-z\/]$/
+const VALID_FOLDER_NAME = /^[a-z]{1}[a-z0-9-_\/]*[a-z0-9\/]$/
 const VALID_SERVICE_NAME = /^[a-z]{1}[a-z-]*[a-z]$/
 
 program
