@@ -1,20 +1,22 @@
-window.customElements.define('core-header', class extends HTMLElement {
+if (!window.customElements.get('core-header')) {
+  window.customElements.define('core-header', class extends HTMLElement {
 
-  constructor() {
-    super()
-  }
+    constructor() {
+      super()
+    }
 
-  _generateTemplate() {
-    const slot = this.innerHTML
-    return `
+    _generateTemplate() {
+      const slot = this.innerHTML
+      return `
       <div class="core-header-divider">
         <h1 class="core-header-title">${slot}</h1>
       </div>
     `
-  }
+    }
 
-  connectedCallback() {
-    this.innerHTML = this._generateTemplate()
-  }
+    connectedCallback() {
+      this.innerHTML = this._generateTemplate()
+    }
 
-})
+  })
+}

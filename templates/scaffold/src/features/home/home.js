@@ -8,4 +8,4 @@ const RouteCtrl = async (req, next) => {
 }
 
 Router
-  .defaultPath('/home', RouteCtrl)
+  .defaultPath('/home', Router.customElementsReady, RouteCtrl)

@@ -8,8 +8,8 @@ const ALLOWED_TYPES = ['component', 'c', 'element', 'e', 'feature', 'f', 'servic
 const Logging = require('./logging')
 const ROOT_FOLDER = require('./root-folder')
 
-var cp = require('child_process')
-var os = require('os')
+const { spawn } = require('child_process');
+const os = require('os')
 
 const TYPE_VALUES = {
   c: 'component',
@@ -234,7 +234,14 @@ window.customElements.define('translate-locale', class extends HTMLElement {
     // npm binary based on OS
     const npmCmd = os.platform().startsWith('win') ? 'npm.cmd' : 'npm'
     // install folder
-    cp.spawn(npmCmd, ['i'], { env: process.env, cwd: projectFolderName, stdio: 'inherit' })
+    const installSpawn = spawn(npmCmd, ['i'], { env: process.env, cwd: projectFolderName, stdio: 'inherit' })
+
+    installSpawn.on('close', () => {
+      Logging.info('Next Steps:')
+      console.log('')
+      Logging.success('$ cd ', projectFolderName)
+      Logging.success('$ npm install ')
+    })
 
     Logging.success('Files have been copied to', projectFolderName)
     Logging.info('Running npm install in', projectFolderName)
@@ -288,31 +295,33 @@ import { HtmlCache } from 'services'
 import { ModelMixin } from '@hingejs/services'
 const Base = ModelMixin(HTMLElement)
 
-window.customElements.define('${name}', class extends Base {
+if (!window.customElements.get('${name}')) {
+  window.customElements.define('${name}', class extends Base {
 
-  constructor() {
-    super()
-  }
+    constructor() {
+      super()
+    }
 
-  _generateTemplate() {
-    return HtmlCache.get('templates/${name}.html')
-  }
+    _generateTemplate() {
+      return HtmlCache.get('templates/${name}.html')
+    }
 
-  async connectedCallback() {
-    await this.htmlMarker.render(this, this._generateTemplate())
-  }
+    async connectedCallback() {
+      await this.htmlMarker.render(this, this._generateTemplate())
+    }
 
-  get defaultModel() {
-    return Object.assign(super.defaultModel, {
-      test: 'This is a value'
-    })
-  }
+    get defaultModel() {
+      return Object.assign(super.defaultModel, {
+        test: 'This is a value'
+      })
+    }
 
-  async onModelUpdate() {
-    await this.htmlMarker.updateModel(this.model)
-  }
+    async onModelUpdate() {
+      await this.htmlMarker.updateModel(this.model)
+    }
 
-})
+  })
+}
 `.trimStart()
 
   const FileHTML = '<p>${test}</p>'
@@ -363,59 +372,61 @@ describe('${name}', () => {
 
 async function createElement_NonShadow(name) {
   const FileJS = `
-window.customElements.define('${name}', class extends HTMLElement {
+if (!window.customElements.get('${name}')) {
+  window.customElements.define('${name}', class extends HTMLElement {
 
-  constructor() {
-    super()
-  }
-
-  _generateTemplate() {
-    return \`
-      <p>My new element</p>
-    \`.trim()
-  }
-
-  _insertStyle() {
-    const style = \`
-    <style type="text/css" id="${name}-style">
-      ${name} p {
-        border: 1px solid var(--${name}-border-color, #111);
-        border-radius: 2px;
-        display: flex;
-        justify-content: space-between;
-      }
-    </style>\`
-    const elem = document.head || this.parentElement || this
-    if (!elem.querySelector('#${name}-style')) {
-      elem.insertAdjacentHTML('afterbegin', style)
+    constructor() {
+      super()
     }
-  }
 
-  connectedCallback() {
-    this._insertStyle()
-    this.innerHTML = this._generateTemplate()
-    this.$p = this.querySelector('p')
-    this._render()
-  }
+    _generateTemplate() {
+      return \`
+        <p>My new element</p>
+      \`.trim()
+    }
 
-  static get observedAttributes() {
-    return ['data-msg']
-  }
+    _insertStyle() {
+      const style = \`
+      <style type="text/css" id="${name}-style">
+        ${name} p {
+          border: 1px solid var(--${name}-border-color, #111);
+          border-radius: 2px;
+          display: flex;
+          justify-content: space-between;
+        }
+      </style>\`
+      const elem = document.head || this.parentElement || this
+      if (!elem.querySelector('#${name}-style')) {
+        elem.insertAdjacentHTML('afterbegin', style)
+      }
+    }
 
-  attributeChangedCallback(attr, oldValue, newValue) {
-    if (oldValue !== newValue) {
+    connectedCallback() {
+      this._insertStyle()
+      this.innerHTML = this._generateTemplate()
+      this.$p = this.querySelector('p')
       this._render()
     }
-  }
 
-  _render() {
-    const message = this.getAttribute('data-msg')
-    if (message && message.length) {
-      this.$p.innerHTML = message
+    static get observedAttributes() {
+      return ['data-msg']
     }
-  }
 
-})
+    attributeChangedCallback(attr, oldValue, newValue) {
+      if (oldValue !== newValue) {
+        this._render()
+      }
+    }
+
+    _render() {
+      const message = this.getAttribute('data-msg')
+      if (message && message.length) {
+        this.$p.innerHTML = message
+      }
+    }
+
+  })
+}
 `.trimStart()
 
   const FileSpec = `
@@ -477,50 +488,58 @@ describe('${name}', () => {
 
 async function createElement_Shadow(name) {
   const FileJS = `
-window.customElements.define('${name}', class extends HTMLElement {
+if (!window.customElements.get('${name}')) {
+  window.customElements.define('${name}', class extends HTMLElement {
 
-  constructor() {
-    super()
-    const shadowRoot = this.attachShadow({ mode: 'open' })
-    shadowRoot.appendChild(this._generateTemplate().content.cloneNode(true))
-    this.$content = this.shadowRoot.querySelector('div.content')
-  }
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({ mode: 'open' })
+      shadowRoot.appendChild(this._generateTemplate().content.cloneNode(true))
+      this.$content = this.shadowRoot.querySelector('div.content')
+      this.$slot = this.shadowRoot.querySelector('slot')
+      this.$slotContent
 
-  _generateTemplate() {
-    const template = document.createElement('template')
-    template.innerHTML = \`
-      <style>
-        .content {
-          background-color: var(--background, transparent);
-        }
-      </style>
-      <div class="content">
-        <slot></slot>
-      </div>
-    \`
-    return template
-  }
+      this.$slot.addEventListener('slotchange', () => {
+        this.$slotContent = this.$slot.assignedNodes({ flatten: true })
+      })
+    }
 
-  connectedCallback() {
-    this._render()
-  }
+    _generateTemplate() {
+      const template = document.createElement('template')
+      template.innerHTML = \`
+        <style>
+          .content {
+            background-color: var(--background, transparent);
+          }
+        </style>
+        <div class="content">
+          <slot></slot>
+        </div>
+      \`
+      return template
+    }
 
-  static get observedAttributes() {
-    return ['data-active']
-  }
-
-  attributeChangedCallback(attr, oldValue, newValue) {
-    if (oldValue !== newValue) {
+    connectedCallback() {
       this._render()
     }
-  }
 
-  _render() {
-    const isActive = this.getAttribute('data-active') === 'true'
-    this.$content.classList.toggle('active', isActive)
-  }
+    static get observedAttributes() {
+      return ['data-active']
+    }
 
-})
+    attributeChangedCallback(attr, oldValue, newValue) {
+      if (oldValue !== newValue) {
+        this._render()
+      }
+    }
+
+    _render() {
+      const isActive = this.getAttribute('data-active') === 'true'
+      this.$content.classList.toggle('active', isActive)
+    }
+
+  })
+}
 `.trimStart()
 
   const FileSpec = `
