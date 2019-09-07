@@ -239,7 +239,7 @@ window.customElements.define('translate-locale', class extends HTMLElement {
     installSpawn.on('close', () => {
       Logging.info('Next Steps:')
       console.log('')
-      Logging.success('$ cd ', projectFolderName)
+      Logging.success('$ cd', projectFolderName)
       Logging.success('$ npm install ')
     })
 
