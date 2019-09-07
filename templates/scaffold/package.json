@@ -20,7 +20,7 @@
     "preserve": "npm run build:beta",
     "serve": "node dist/serve.js",
     "pretest": "npm run build:cache",
-    "test": "./node_modules/.bin/karma start test/karma.conf.js"
+    "test": "./node_modules/.bin/karma start ./test/unit/karma.conf.js"
   },
   "nodemonConfig": {
     "watch": [
