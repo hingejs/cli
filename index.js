@@ -240,7 +240,7 @@ window.customElements.define('translate-locale', class extends HTMLElement {
       Logging.info('Next Steps:')
       console.log('')
       Logging.success('$ cd', projectFolderName)
-      Logging.success('$ npm install ')
+      Logging.success('$ npm start')
     })
 
     Logging.success('Files have been copied to', projectFolderName)
