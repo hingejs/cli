@@ -1,5 +1,5 @@
 
-import { Util } from '../../src/services/index.js'
+import { Util } from 'services'
 
 describe('main', () => {
 

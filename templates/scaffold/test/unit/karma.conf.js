@@ -1,6 +1,6 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
-const UI_ENV_VARS = require('../environment.build')
+const UI_ENV_VARS = require('../../environment.build')
 const { resolve } = require('path')
 
 module.exports = function (config) {
@@ -12,7 +12,7 @@ module.exports = function (config) {
     concurrency: Infinity,
     coverageIstanbulReporter: {
       combineBrowserReports: true,
-      dir : 'test/coverage/',
+      dir : 'test/unit/coverage/',
       fixWebpackSourcePaths: true,
       reports: ['html', 'lcovonly', 'text-summary'],
       skipFilesWithNoCoverage: false
@@ -61,7 +61,9 @@ module.exports = function (config) {
       },
       resolve: {
         alias: {
-          services: resolve(__dirname, '..' , 'src/services')
+          components: resolve(__dirname, '..', '..', 'src/components'),
+          elements: resolve(__dirname, '..', '..', 'src/elements'),
+          services: resolve(__dirname, '..', '..', 'src/services')
         },
         extensions: ['.js']
       },
