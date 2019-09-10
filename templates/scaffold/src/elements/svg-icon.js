@@ -1,8 +1,7 @@
 if (!window.customElements.get('svg-icon')) {
-  window.customElements.define('svg-icon', class extends HTMLElement {
-
+  window.customElements.define('svg-icon', class extends window.HTMLElement {
     constructor() {
-      super()
+      super('')
     }
 
     _generateTemplate() {

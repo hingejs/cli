@@ -210,10 +210,9 @@ I18n.enableDocumentObserver()
       await appendFile(`${projectFolderName}/src/main.js`, mainJS, 'utf8')
       const componentHTML = `import { I18n } from '@hingejs/services'
 
-window.customElements.define('translate-locale', class extends HTMLElement {
-
+window.customElements.define('translate-locale', class extends window.HTMLElement {
   constructor() {
-    super()
+    super('')
   }
 
   async generateTemplate() {
@@ -293,13 +292,12 @@ async function createComponent(name) {
   const FileJS = `
 import { HtmlCache } from 'services'
 import { ModelMixin } from '@hingejs/services'
-const Base = ModelMixin(HTMLElement)
+const Base = ModelMixin(window.HTMLElement)
 
 if (!window.customElements.get('${name}')) {
   window.customElements.define('${name}', class extends Base {
-
     constructor() {
-      super()
+      super('')
     }
 
     _generateTemplate() {
@@ -373,10 +371,9 @@ describe('${name}', () => {
 async function createElement_NonShadow(name) {
   const FileJS = `
 if (!window.customElements.get('${name}')) {
-  window.customElements.define('${name}', class extends HTMLElement {
-
+  window.customElements.define('${name}', class extends window.HTMLElement {
     constructor() {
-      super()
+      super('')
     }
 
     _generateTemplate() {
@@ -489,10 +486,9 @@ describe('${name}', () => {
 async function createElement_Shadow(name) {
   const FileJS = `
 if (!window.customElements.get('${name}')) {
-  window.customElements.define('${name}', class extends HTMLElement {
-
+  window.customElements.define('${name}', class extends window.HTMLElement {
     constructor() {
-      super()
+      super('')
       const shadowRoot = this.attachShadow({ mode: 'open' })
       shadowRoot.appendChild(this._generateTemplate().content.cloneNode(true))
       this.$content = this.shadowRoot.querySelector('div.content')

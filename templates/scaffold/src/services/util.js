@@ -35,7 +35,7 @@ function truncate(str, max = 30) {
 }
 
 function uuid() {
-  return new Date().getTime().toString(36) + performance.now().toString().replace(/[^0-9]/g, '')
+  return new Date().getTime().toString(36) + window.performance.now().toString().replace(/[^0-9]/g, '')
 }
 
 export {

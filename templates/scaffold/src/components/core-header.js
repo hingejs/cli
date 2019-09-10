@@ -1,8 +1,7 @@
 if (!window.customElements.get('core-header')) {
-  window.customElements.define('core-header', class extends HTMLElement {
-
+  window.customElements.define('core-header', class extends window.HTMLElement {
     constructor() {
-      super()
+      super('')
     }
 
     _generateTemplate() {

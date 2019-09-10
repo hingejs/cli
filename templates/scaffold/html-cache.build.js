@@ -34,7 +34,7 @@ async function main() {
   }))
   let html = ['const HtmlCache = new Map()']
   html = html.concat(flatten(caches))
-  html.push('export default HtmlCache')
+  html.push('export default HtmlCache\n')
 
   if(existsSync(SAVE_DIR) && lstatSync(SAVE_DIR).isDirectory()) {
     await writeFileProms(resolve(SAVE_DIR, 'html-cache.js'), html.join('\n'))
