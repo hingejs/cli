@@ -26,6 +26,10 @@ This generator sets you up so you have the following features available to you f
 - i18n translation process
 - Templates generated for rapid development
 
+### Why use this
+
+**Very lightweight.**  The build process has dependencies but the core SPA JS is just a couple of helper services(with zero dependencies) and some baseline elements(with zero dependencies) and you have a native low overhead application with with the latest and greatest JS has to offer.
+
 #### Wiki
 
 For more information, tips and guides visit:

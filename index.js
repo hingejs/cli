@@ -293,15 +293,16 @@ async function createComponent(name) {
 import { HtmlCache } from 'services'
 import { ModelMixin } from '@hingejs/services'
 const Base = ModelMixin(window.HTMLElement)
+const TAG_NAME = '${name}'
 
-if (!window.customElements.get('${name}')) {
-  window.customElements.define('${name}', class extends Base {
+if (!window.customElements.get(TAG_NAME)) {
+  window.customElements.define(TAG_NAME, class extends Base {
     constructor() {
       super('')
     }
 
     _generateTemplate() {
-      return HtmlCache.get('templates/${name}.html')
+      return HtmlCache.get(\`templates/\${TAG_NAME}.html\`)
     }
 
     async connectedCallback() {
@@ -370,8 +371,9 @@ describe('${name}', () => {
 
 async function createElement_NonShadow(name) {
   const FileJS = `
-if (!window.customElements.get('${name}')) {
-  window.customElements.define('${name}', class extends window.HTMLElement {
+const TAG_NAME = '${name}'
+if (!window.customElements.get(TAG_NAME)) {
+  window.customElements.define(TAG_NAME, class extends window.HTMLElement {
     constructor() {
       super('')
     }
@@ -384,16 +386,16 @@ if (!window.customElements.get('${name}')) {
 
     _insertStyle() {
       const style = \`
-      <style type="text/css" id="${name}-style">
-        ${name} p {
-          border: 1px solid var(--${name}-border-color, #111);
+      <style type="text/css" id="\${TAG_NAME}-style">
+        \${TAG_NAME} p {
+          border: 1px solid var(--\${TAG_NAME}-border-color, #111);
           border-radius: 2px;
           display: flex;
           justify-content: space-between;
         }
       </style>\`
       const elem = document.head || this.parentElement || this
-      if (!elem.querySelector('#${name}-style')) {
+      if (!elem.querySelector('#\${TAG_NAME}-style')) {
         elem.insertAdjacentHTML('afterbegin', style)
       }
     }
@@ -485,8 +487,9 @@ describe('${name}', () => {
 
 async function createElement_Shadow(name) {
   const FileJS = `
-if (!window.customElements.get('${name}')) {
-  window.customElements.define('${name}', class extends window.HTMLElement {
+  const TAG_NAME = '${name}'
+if (!window.customElements.get(TAG_NAME)) {
+  window.customElements.define(TAG_NAME, class extends window.HTMLElement {
     constructor() {
       super('')
       const shadowRoot = this.attachShadow({ mode: 'open' })
