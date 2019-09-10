@@ -80,6 +80,6 @@
   },
   "dependencies": {
     "@hingejs/services": "^0.0.23",
-    "@hingejs/webcomponents": "^0.0.11"
+    "@hingejs/webcomponents": "^0.0.13"
   }
 }
