@@ -1,6 +1,18 @@
 #!/usr/bin/env node
 
-const { appendFile, copy, ensureFile, existsSync, mkdir, pathExists, writeFile } = require('fs-extra')
+const {
+  appendFile,
+  copy,
+  ensureFile,
+  existsSync,
+  mkdir,
+  pathExists,
+  readdir,
+  readJson,
+  stat,
+  writeFile,
+  writeJson
+} = require('fs-extra')
 const { resolve } = require('path')
 const program = require('commander')
 const { version } = require('./package.json')
@@ -715,6 +727,10 @@ async function createFeature(name) {
   if (name.trim().split('/').length === 1) {
     name = `${name}/${name}`
   }
+  const LOCALE_PATH = `${ROOT_FOLDER}/assets/locales`
+  const localesExists = await pathExists(LOCALE_PATH)
+
+
   const FileJS = `
 import { HtmlCache } from 'services'
 import { Router } from '@hingejs/services'
@@ -729,12 +745,12 @@ const RouteCtrl = async (req, next) => {
 }
 
 Router
-  .setPath('${name}', RouteCtrl)
+  .setPath('${name}', Router.customElementsReady, RouteCtrl)
 `.trimStart()
 
   const FileHTML = `
 <template>
-  <h1>This is the ${name} page</h1>
+  ${localesExists ? `<h1 data-i18n="${name}:header"></h1>` : `<h1>This is the ${name} page</h1>`}
 </template>
 
 <style>
@@ -752,8 +768,40 @@ Router
     await ensureFile(`${SRC_PATH}/${name}.html`)
     await writeFile(`${SRC_PATH}/${name}.html`, FileHTML)
     await appendFile(`${SRC_PATH}/index.js`, `import './${name}.js'\n`, 'utf8')
+
+    if (localesExists) {
+      const files = await getJsonFiles(LOCALE_PATH)
+      flatten(files).map(async file => {
+        const unordered = await readJson(f, { throws: false })
+        if (unordered) {
+          unordered[`${name}:header`] = `This is the ${name} page`
+          const ordered = {}
+          Object.keys(unordered).sort(new Intl.Collator().compare).forEach((key) => {
+            ordered[key] = unordered[key]
+          })
+          await writeJson(file, ordered)
+        }
+      })
+    }
+
   } else {
     Logging.error('Feature files not added. Could not find', SRC_PATH)
   }
   return Promise.resolve()
+}
+
+
+async function getJsonFiles(dir) {
+  const subDirs = await readdir(dir)
+  const files = await Promise.all(subDirs.map(async subDirs => {
+    const res = resolve(dir, subDirs)
+    return (await stat(res)).isDirectory() ? getJsonFiles(res) : res
+  }))
+  return files
+    .reduce((a, f) => a.concat(f), [])
+    .filter(file => /.*\.(json)/ig.test(file))
+}
+
+function flatten(arrays) {
+  return Array.isArray(arrays) ? [].concat.apply([], arrays) : []
 }
