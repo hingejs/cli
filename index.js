@@ -698,7 +698,7 @@ export default new ${nameCapitalized}()
   const srcFolderExists = await pathExists(SRC_PATH)
   if (srcFolderExists) {
     await writeFile(`${SRC_PATH}/${name}.js`, FileJS)
-    const importService = `import ${nameCapitalized} from './${name}.js'\nexport { ${nameCapitalized} }`
+    const importService = `\nimport ${nameCapitalized} from './${name}.js'\nexport { ${nameCapitalized} }\n`
     await appendFile(`${SRC_PATH}/index.js`, importService, 'utf8')
   } else {
     return Promise.reject(`Service files not added. Could not find ${TESTING_PATH}`)
@@ -726,7 +726,7 @@ describe('${nameCapitalized}', () => {
   const unitTestExists = await pathExists(TESTING_PATH)
   if (unitTestExists) {
     await writeFile(`${TESTING_PATH}/${name}.spec.js`, FileSpec)
-    await appendFile(`${TESTING_PATH}/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+    await appendFile(`${TESTING_PATH}/index.spec.js`, `\nimport './${name}.spec.js'\n`, 'utf8')
   } else {
     return Promise.reject(`Unit Testing files not added. Could not find ${TESTING_PATH}`)
   }
@@ -787,8 +787,7 @@ Router
 
     if (localesExists) {
       const files = await getJsonFiles(LOCALE_PATH)
-      Logging.info('This App is using i18n', files)
-      Logging.info('edited')
+      Logging.info('This App is using i18n and has updated the locale folder')
       flatten(files).forEach(async file => {
         const unordered = await readJson(file, { throws: false })
         if (unordered) {
