@@ -773,7 +773,7 @@ Router
       const files = await getJsonFiles(LOCALE_PATH)
       Logging.info('This App is using i18n', files)
       await Promise.all(flatten(files).map(async file => {
-        const unordered = await readJson(f, { throws: false })
+        const unordered = await readJson(files, { throws: false })
         if (unordered) {
           unordered[`${name}:header`] = `This is the ${name} page`
           const ordered = {}
