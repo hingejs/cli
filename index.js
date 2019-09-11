@@ -59,7 +59,7 @@ program
       if (!validName) {
         Logging.error(name, 'is not valid to generate a type of', type)
       } else if (isDuplicate) {
-        Logging.error(name, 'already exist and cannot be duplicated',)
+        Logging.error(name, 'already exist and cannot be duplicated')
       } else {
         generateType(type, name, options)
       }
@@ -110,9 +110,9 @@ function myParseInt(value) {
 }
 
 function titleCase(string) {
-  const words = string.split('-');
-  let output =  '';
-  words.forEach( word => {
+  const words = string.split('-')
+  let output = ''
+  words.forEach(word => {
     output += word.charAt(0).toUpperCase() + word.slice(1)
   })
   return output;
@@ -120,13 +120,13 @@ function titleCase(string) {
 
 function adjustFolderPath(path) {
   return path ? path.trim().split('/')
-      .filter(pathName => pathName.length)
-      .map(pathName => pathName.toLowerCase())
-      .join('/') : ''
+    .filter(pathName => pathName.length)
+    .map(pathName => pathName.toLowerCase())
+    .join('/') : ''
 }
 
 function checkIfCustomElementExist(name) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     const hasComponent = existsSync(`${ROOT_FOLDER}/src/components/${name}.js`)
     const hasElement = existsSync(`${ROOT_FOLDER}/src/elements/${name}.js`)
     resolve(!!(hasComponent || hasElement))
@@ -185,10 +185,10 @@ jsdoc/
     await writeFile(`${projectFolderName}/.gitignore`, gitIgnoreText)
     await mkdir(`${projectFolderName}/src/templates`, { recursive: true })
 
-    if(options.i18n) {
+    if (options.i18n) {
       await mkdir(`${projectFolderName}/assets/locales`, { recursive: true })
       const enJSON = {
-          "global:header": "This is the home page"
+        "global:header": "This is the home page"
       }
       await writeFile(`${projectFolderName}/assets/locales/en.json`, JSON.stringify(enJSON, undefined, 2))
       const homeHTML = `
@@ -255,31 +255,31 @@ async function generateType(type, name, options) {
   const path = `${ROOT_FOLDER}/src/${type}s`
   const exists = await pathExists(path)
 
-  if(exists) {
-    switch(type) {
+  if (exists) {
+    switch (type) {
       case 'component':
-      await createComponent(name)
-      Logging.success(`Generated ${type} File named ${name}`)
-      break
+        await createComponent(name)
+        Logging.success(`Generated ${type} File named ${name}`)
+        break
       case 'element':
-      if(options.shadow) {
-        await createElement_Shadow(name)
-      } else {
-        await createElement_NonShadow(name)
-      }
-      Logging.success(`Generated ${type} File named ${name}`)
-      break
+        if (options.shadow) {
+          await createElement_Shadow(name)
+        } else {
+          await createElement_NonShadow(name)
+        }
+        Logging.success(`Generated ${type} File named ${name}`)
+        break
       case 'service':
-      await createService(name)
-      name = titleCase(name) + 'Service'
-      Logging.success(`Generated ${type} File named ${name}`)
-      break
+        await createService(name)
+        name = titleCase(name) + 'Service'
+        Logging.success(`Generated ${type} File named ${name}`)
+        break
       case 'feature':
-      await createFeature(name)
-      Logging.success(`Generated ${type} Structure named ${name}`)
-      break
+        await createFeature(name)
+        Logging.success(`Generated ${type} Structure named ${name}`)
+        break
       default:
-      Logging.error(type, 'not yet implemented')
+        Logging.error(type, 'not yet implemented')
     }
 
   } else {
@@ -360,11 +360,24 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/components/${name}.js`, FileJS)
-  await appendFile(`${ROOT_FOLDER}/src/components/index.js`, `import './${name}.js'\n`, 'utf8')
-  await writeFile(`${ROOT_FOLDER}/src/templates/${name}.html`, FileHTML)
-  await writeFile(`${ROOT_FOLDER}/test/components/${name}.spec.js`, FileSpec)
-  await appendFile(`${ROOT_FOLDER}/test/components/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  const SRC_PATH = `${ROOT_FOLDER}/src/components`
+  const srcFolderExists = await pathExists(SRC_PATH)
+  if (srcFolderExists) {
+    await writeFile(`${SRC_PATH}/${name}.js`, FileJS)
+    await appendFile(`${SRC_PATH}/index.js`, `import './${name}.js'\n`, 'utf8')
+    await writeFile(`${ROOT_FOLDER}/src/templates/${name}.html`, FileHTML)
+  } else {
+    Logging.error('Component files not added. Could not find', SRC_PATH)
+  }
+
+  const TESTING_PATH = `${ROOT_FOLDER}/test/unit/components`
+  const unitTestExists = await pathExists(TESTING_PATH)
+  if (unitTestExists) {
+    await writeFile(`${TESTING_PATH}/${name}.spec.js`, FileSpec)
+    await appendFile(`${TESTING_PATH}/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  } else {
+    Logging.error('Unit Testing files not added. Could not find', TESTING_PATH)
+  }
   return Promise.resolve()
 }
 
@@ -476,11 +489,23 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
-  await appendFile(`${ROOT_FOLDER}/src/elements/index.js`, `import './${name}.js'\n`, 'utf8')
+  const SRC_PATH = `${ROOT_FOLDER}/src/elements`
+  const srcFolderExists = await pathExists(SRC_PATH)
+  if (srcFolderExists) {
+    await writeFile(`${SRC_PATH}/${name}.js`, FileJS)
+    await appendFile(`${SRC_PATH}/index.js`, `import './${name}.js'\n`, 'utf8')
+  } else {
+    Logging.error('Element files not added. Could not find', SRC_PATH)
+  }
 
-  await writeFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
-  await appendFile(`${ROOT_FOLDER}/test/elements/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  const TESTING_PATH = `${ROOT_FOLDER}/test/unit/elements`
+  const unitTestExists = await pathExists(TESTING_PATH)
+  if (unitTestExists) {
+    await writeFile(`${TESTING_PATH}/${name}.spec.js`, FileSpec)
+    await appendFile(`${TESTING_PATH}/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  } else {
+    Logging.error('Unit Testing files not added. Could not find', TESTING_PATH)
+  }
   return Promise.resolve()
 }
 
@@ -590,11 +615,23 @@ describe('${name}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/elements/${name}.js`, FileJS)
-  await appendFile(`${ROOT_FOLDER}/src/elements/index.js`, `import './${name}.js'\n`, 'utf8')
+  const SRC_PATH = `${ROOT_FOLDER}/src/elements`
+  const srcFolderExists = await pathExists(SRC_PATH)
+  if (srcFolderExists) {
+    await writeFile(`${SRC_PATH}/${name}.js`, FileJS)
+    await appendFile(`${SRC_PATH}/index.js`, `import './${name}.js'\n`, 'utf8')
+  } else {
+    Logging.error('Element files not added. Could not find', TESTING_PATH)
+  }
 
-  await writeFile(`${ROOT_FOLDER}/test/elements/${name}.spec.js`, FileSpec)
-  await appendFile(`${ROOT_FOLDER}/test/elements/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  const TESTING_PATH = `${ROOT_FOLDER}/test/unit/elements`
+  const unitTestExists = await pathExists(TESTING_PATH)
+  if (unitTestExists) {
+    await writeFile(`${TESTING_PATH}/${name}.spec.js`, FileSpec)
+    await appendFile(`${TESTING_PATH}/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  } else {
+    Logging.error('Unit Testing files not added. Could not find', TESTING_PATH)
+  }
   return Promise.resolve()
 }
 
@@ -634,9 +671,15 @@ class ${nameCapitalized} extends BaseService {
 export default new ${nameCapitalized}()
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/src/services/${name}.js`, FileJS)
-  const importService = `import ${nameCapitalized} from './${name}.js'\nexport { ${nameCapitalized} }`
-  await appendFile(`${ROOT_FOLDER}/src/services/index.js`, importService, 'utf8')
+  const SRC_PATH = `${ROOT_FOLDER}/src/services`
+  const srcFolderExists = await pathExists(SRC_PATH)
+  if (srcFolderExists) {
+    await writeFile(`${SRC_PATH}/${name}.js`, FileJS)
+    const importService = `import ${nameCapitalized} from './${name}.js'\nexport { ${nameCapitalized} }`
+    await appendFile(`${SRC_PATH}/index.js`, importService, 'utf8')
+  } else {
+    Logging.error('Service files not added. Could not find', TESTING_PATH)
+  }
 
   const FileSpec = `
 import { ${nameCapitalized} } from '../../src/services/index.js'
@@ -656,13 +699,20 @@ describe('${nameCapitalized}', () => {
 })
 `.trimStart()
 
-  await writeFile(`${ROOT_FOLDER}/test/services/${name}.spec.js`, FileSpec)
-  await appendFile(`${ROOT_FOLDER}/test/services/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  const TESTING_PATH = `${ROOT_FOLDER}/test/unit/services`
+  const unitTestExists = await pathExists(TESTING_PATH)
+  if (unitTestExists) {
+    await writeFile(`${TESTING_PATH}/${name}.spec.js`, FileSpec)
+    await appendFile(`${TESTING_PATH}/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+  } else {
+    Logging.error('Unit Testing files not added. Could not find', TESTING_PATH)
+  }
+  return Promise.resolve()
 }
 
 async function createFeature(name) {
   name = adjustFolderPath(name)
-  if(name.trim().split('/').length === 1) {
+  if (name.trim().split('/').length === 1) {
     name = `${name}/${name}`
   }
   const FileJS = `
@@ -682,7 +732,7 @@ Router
   .setPath('${name}', RouteCtrl)
 `.trimStart()
 
-const FileHTML = `
+  const FileHTML = `
 <template>
   <h1>This is the ${name} page</h1>
 </template>
@@ -694,9 +744,16 @@ const FileHTML = `
 </style>
 `.trimStart()
 
-  await ensureFile(`${ROOT_FOLDER}/src/features/${name}.js`)
-  await writeFile(`${ROOT_FOLDER}/src/features/${name}.js`, FileJS)
-  await ensureFile(`${ROOT_FOLDER}/src/features/${name}.html`)
-  await writeFile(`${ROOT_FOLDER}/src/features/${name}.html`, FileHTML)
-  await appendFile(`${ROOT_FOLDER}/src/features/index.js`, `import './${name}.js'\n`, 'utf8')
+  const SRC_PATH = `${ROOT_FOLDER}/src/features`
+  const srcFolderExists = await pathExists(SRC_PATH)
+  if (srcFolderExists) {
+    await ensureFile(`${SRC_PATH}/${name}.js`)
+    await writeFile(`${SRC_PATH}/${name}.js`, FileJS)
+    await ensureFile(`${SRC_PATH}/${name}.html`)
+    await writeFile(`${SRC_PATH}/${name}.html`, FileHTML)
+    await appendFile(`${SRC_PATH}/index.js`, `import './${name}.js'\n`, 'utf8')
+  } else {
+    Logging.error('Feature files not added. Could not find', SRC_PATH)
+  }
+  return Promise.resolve()
 }
