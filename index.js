@@ -771,7 +771,8 @@ Router
 
     if (localesExists) {
       const files = await getJsonFiles(LOCALE_PATH)
-      flatten(files).map(async file => {
+      Logging.info('This App is using i18n', files)
+      await Promise.all(flatten(files).map(async file => {
         const unordered = await readJson(f, { throws: false })
         if (unordered) {
           unordered[`${name}:header`] = `This is the ${name} page`
@@ -781,7 +782,7 @@ Router
           })
           await writeJson(file, ordered)
         }
-      })
+      }))
     }
 
   } else {
