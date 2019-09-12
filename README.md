@@ -28,7 +28,7 @@ This generator sets you up so you have the following features available to you f
 
 ### Why use this
 
-**As lightweight as you can get!**  The build process has dependencies but the core SPA JS bundled `dist` files are just a couple of helper services and some baseline elements all with **zero(0) dependencies**.  What you end up with is a purely native, low overhead application with the latest and greatest JS has to offer.  That means speed and a very small file size for a full production application.
+**As lightweight as you can get!**  The build process has dev-dependencies but the core SPA JS bundled `dist` files are just a couple of helper services and some baseline elements all with **zero(0) dependencies**.  What you end up with is a purely native, low overhead application with the latest and greatest JS has to offer.  That means speed and a very small file size for a full production application.
 
 To maintain the application the developer just needs to know JavaScript.  There is no extra process, custom or made-up design, just ES6+ JavaScript.
 
