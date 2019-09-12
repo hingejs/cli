@@ -28,15 +28,17 @@ This generator sets you up so you have the following features available to you f
 
 ### Why use this
 
-**Very lightweight.**  The build process has dependencies but the core SPA JS is just a couple of helper services(with zero dependencies) and some baseline elements(with zero dependencies) and you have a native low overhead application with with the latest and greatest JS has to offer.
+**Very lightweight.**  The build process has dependencies but the core SPA JS bundled `dist` files are just a couple of helper services(with zero dependencies) and some baseline elements(with zero dependencies).  What you end up with is a purely native, low overhead application with the latest and greatest JS has to offer.  
 
-#### Wiki
+To maintain the application the developer just needs to know JavaScript.  There is no extra process, custom or made-up design, just ES6+ JavaScript.
+
+### Wiki
 
 For more information, tips and guides visit:
 
 - https://github.com/hingejs/generator/wiki
 
-#### Related packages
+### Related packages
 
 - https://www.npmjs.com/package/@hingejs/services
 - https://www.npmjs.com/package/@hingejs/webcomponents
@@ -184,9 +186,9 @@ $ hingejs g e tool-tip -s
 ```
 
 
-### Generate Name Rules
+## Generate Name Rules
 
-#### Component and Elements
+### Component and Elements
 Follows rules for w3c custom elements.  Must begin with an alpha character.  Can be alpha-numeric, but must contain one hyphen(-).
 
 ```sh
@@ -200,7 +202,7 @@ $ hingejs generate element tool-tip
 
  > `tool-tip` to be used as `<tool-tip></tool-tip>`
  
-#### Services
+### Services
   Must be lowercase with hyphen's(-) to separate words.
 
 ```sh
@@ -217,7 +219,7 @@ Using a service in the application you can do the following.  Webpack is configu
 import { TodoService } from 'services'
 ```
 
-#### Features
+### Features
   Must be lowercase with directory separators(/).  This structure will be generated in the features folder.
 
 ```sh
