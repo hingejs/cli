@@ -1,5 +1,15 @@
 # Project
 
+* [Installation](#installation)
+* [Environment Variables Setup](#environment-variables-setup)
+* [Start Development](#start-development)
+* [Exit Development](#exit-development)
+* [Serve Application for Testing](#serve-application-for-testing)
+* [Generate Files for Beta or Release](#generate-files-for-beta-or-release)
+* [Code Quality Check](#code-quality-check)
+* [Wiki](#wiki)
+
+
 ## Installation
 
 The following software is required.
