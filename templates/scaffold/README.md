@@ -34,11 +34,11 @@ When starting Development run the following command.  All code changes made in t
 $ npm start
 ```
 
-### Exit Development
+## Exit Development
 
-In the terminal enter `ctrl + c` to end the process.
+In the terminal press `ctrl + c` to end the process.
 
-## Serve Application for testing
+## Serve Application for Testing
 
 For non development the following command will run the server without watching for code changes.
 
@@ -46,7 +46,7 @@ For non development the following command will run the server without watching f
 $ npm run serve
 ```
 
-## Generate Files for beta and release
+## Generate Files for Beta or Release
 
 Files will be generated into a folder called `/dist`
 
@@ -64,20 +64,20 @@ $ npm run build:release
 
 Linting rules are located in the `package.json` file under `eslintConfig` and `stylelint`
 
-both `JavaScript` and `CSS`
+### both `JavaScript` and `CSS`
 
 ```sh
 $ npm run lint
 ```
 
-`JavaScript` only
+### `JavaScript` only
 
 ```sh
 $ npm run lint:js
 ```
 - https://eslint.org/docs/rules/
 
-`CSS` only
+### `CSS` only
 
 ```sh
 $ npm run lint:css
@@ -94,13 +94,13 @@ Example
 
 > util.spec.js
 
-Run Karma with Mocha/Chai/Sinon
+### Run Karma with Mocha/Chai/Sinon
 
 ```sh
 $ npm run unit
 ```
 
-** To run both lint and test use **
+### Run both lint and unit
 
 ```sh
 $ npm run test
