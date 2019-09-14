@@ -18,6 +18,13 @@ is located and enter the following command in the terminal.
 ```sh
 $ npm install
 ```
+## Environment variables setup
+
+Ensure that environment variables are setup prior to starting development.  Copy the contents of the `.env.defaults` file into a `.env` file.
+
+| Variable  | Description | Default |
+|:---------:|:---------:|:---------:|
+| UI_APP_PORT | Port number used for the application | 9000 |
 
 ## Start Development 
 
@@ -58,16 +65,20 @@ $ npm run build:release
 Linting rules are located in the `package.json` file under `eslintConfig` and `stylelint`
 
 both `JavaScript` and `CSS`
+
 ```sh
 $ npm run lint
 ```
+
 `JavaScript` only
+
 ```sh
 $ npm run lint:js
 ```
 - https://eslint.org/docs/rules/
 
 `CSS` only
+
 ```sh
 $ npm run lint:css
 ```
@@ -77,9 +88,19 @@ $ npm run lint:css
 
 ## Code Quality Check with Unit Testing
 
-All test will be added to the `test` folder from the root directory.  Be sure to end all test files with `spec.js`.
+All test will be added to the `/test/unit` folder from the root directory.  Be sure to end all test files with `spec.js`.
 
-Karma with Mocha/Chai/Sinon
+Example
+
+> util.spec.js
+
+Run Karma with Mocha/Chai/Sinon
+
+```sh
+$ npm run unit
+```
+
+** To run both lint and test use **
 
 ```sh
 $ npm run test

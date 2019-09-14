@@ -21,7 +21,7 @@ app.use(helmet())
 app.use(express.static(root))
 app.use(fallback('index.html', { root }))
 
-let httpInstance = app.listen(PORT)
+const httpInstance = app.listen(PORT)
 
 process.on('SIGINT', () => {
   console.log('\x1b[42m \u2713  \x1b[0m \x1b[32m Gracefully shutting down \x1b[0m')
