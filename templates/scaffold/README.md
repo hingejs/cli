@@ -28,7 +28,7 @@ Ensure that environment variables are setup prior to starting development.  Copy
 
 ## Start Development 
 
-When starting Development run the following command.  All code changes made in the `src` directory will be watched and hot released to the current development server.
+When starting Development run the following command.  All code changes made in the `/src` directory will be watched and hot released to the current development server.
 
 ```sh
 $ npm start
@@ -60,24 +60,34 @@ $ npm run build:beta
 $ npm run build:release
 ```
 
+## Code Quality Check
+
+To run a complete quality check use the following command.
+
+### Run both lint and unit
+
+```sh
+$ npm run test
+```
+
 ## Code Quality Check with Linting
 
-Linting rules are located in the `package.json` file under `eslintConfig` and `stylelint`
+Linting rules for JavaScript are located in the root directory file called `.eslintrc`. CSS linting rules are located in the `package.json` file under the key `stylelint`.
 
-### both `JavaScript` and `CSS`
+### Both JavaScript and CSS
 
 ```sh
 $ npm run lint
 ```
 
-### `JavaScript` only
+### JavaScript only
 
 ```sh
 $ npm run lint:js
 ```
 - https://eslint.org/docs/rules/
 
-### `CSS` only
+### CSS only
 
 ```sh
 $ npm run lint:css
@@ -90,20 +100,10 @@ $ npm run lint:css
 
 All test will be added to the `/test/unit` folder from the root directory.  Be sure to end all test files with `spec.js`.
 
-Example
-
-> util.spec.js
-
 ### Run Karma with Mocha/Chai/Sinon
 
 ```sh
 $ npm run unit
-```
-
-### Run both lint and unit
-
-```sh
-$ npm run test
 ```
 
 ## Code Quality Check with End to End Testing
