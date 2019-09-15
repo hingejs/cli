@@ -1,9 +1,9 @@
-import { HtmlCache } from 'services'
 import { Router } from '@hingejs/services'
+import HTML from 'features/home/home.html'
 
 const RouteCtrl = async (req, next) => {
   const $routeDisplay = document.querySelector('h-route-display')
-  await $routeDisplay.insertContent(HtmlCache.get('features/home/home.html'))
+  await $routeDisplay.insertContent(HTML)
   next()
 }
 

@@ -313,8 +313,8 @@ async function generateType(type, name, options) {
 
 async function createComponent(name) {
   const FileJS = `
-import { HtmlCache } from 'services'
 import { ModelMixin } from '@hingejs/services'
+import HTMLTemplate from 'templates/${name}.html'
 const Base = ModelMixin(window.HTMLElement)
 const TAG_NAME = '${name}'
 
@@ -324,12 +324,8 @@ if (!window.customElements.get(TAG_NAME)) {
       super('')
     }
 
-    _generateTemplate() {
-      return HtmlCache.get(\`templates/\${TAG_NAME}.html\`)
-    }
-
     async connectedCallback() {
-      await this.htmlMarker.render(this, this._generateTemplate())
+      await this.htmlMarker.render(this, HTMLTemplate)
     }
 
     get defaultModel() {
@@ -748,12 +744,12 @@ async function createFeature(name) {
 
 
   const FileJS = `
-import { HtmlCache } from 'services'
 import { Router } from '@hingejs/services'
+import HTMLTemplate from 'features/${name}.html'
 
 const RouteCtrl = async (req, next) => {
   const $routeDisplay = document.querySelector('h-route-display')
-  await $routeDisplay.insertContent(HtmlCache.get('features/${name}.html'))
+  await $routeDisplay.insertContent(HTMLTemplate)
   req.exit(async () => {
     // remove if not needed
   })

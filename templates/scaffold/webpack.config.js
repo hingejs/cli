@@ -30,6 +30,19 @@ module.exports = {
   externals: {
     environment: JSON.stringify(UI_ENV_VARS)
   },
+  module: {
+    rules: [
+      {
+        test: /\.(html)$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            attrs: false
+          }
+        }
+      }
+    ]
+  },
   output: {
     filename: '[name].js',
     path: resolve(__dirname, 'dist')
@@ -53,7 +66,11 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      services: resolve(__dirname, 'src/services/index.js')
+      components: resolve(__dirname, 'src/components'),
+      elements: resolve(__dirname, 'src/elements'),
+      features: resolve(__dirname, 'src/features'),
+      services: resolve(__dirname, 'src/services'),
+      templates: resolve(__dirname, 'src/templates')
     },
     extensions: ['.js']
   },

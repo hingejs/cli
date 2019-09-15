@@ -56,6 +56,15 @@ module.exports = function (config) {
               loader: 'istanbul-instrumenter-loader',
               options: { esModules: true }
             },
+          },
+          {
+            test: /\.(html)$/,
+            use: {
+              loader: 'html-loader',
+              options: {
+                attrs: false
+              }
+            }
           }
         ]
       },
@@ -63,7 +72,9 @@ module.exports = function (config) {
         alias: {
           components: resolve(__dirname, '..', '..', 'src/components'),
           elements: resolve(__dirname, '..', '..', 'src/elements'),
-          services: resolve(__dirname, '..', '..', 'src/services')
+          features: resolve(__dirname, '..', '..', 'src/features'),
+          services: resolve(__dirname, '..', '..', 'src/services'),
+          templates: resolve(__dirname, '..', '..', 'src/templates')
         },
         extensions: ['.js']
       },
