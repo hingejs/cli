@@ -1,9 +1,9 @@
+import HTMLTemplate from 'features/home/home.html'
 import { Router } from '@hingejs/services'
-import HTML from 'features/home/home.html'
 
 const RouteCtrl = async (req, next) => {
   const $routeDisplay = document.querySelector('h-route-display')
-  await $routeDisplay.insertContent(HTML)
+  await $routeDisplay.insertContent(HTMLTemplate)
   next()
 }
 

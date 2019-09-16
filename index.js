@@ -313,8 +313,9 @@ async function generateType(type, name, options) {
 
 async function createComponent(name) {
   const FileJS = `
-import { ModelMixin } from '@hingejs/services'
 import HTMLTemplate from 'templates/${name}.html'
+import { ModelMixin } from '@hingejs/services'
+
 const Base = ModelMixin(window.HTMLElement)
 const TAG_NAME = '${name}'
 
@@ -744,8 +745,8 @@ async function createFeature(name) {
 
 
   const FileJS = `
-import { Router } from '@hingejs/services'
 import HTMLTemplate from 'features/${name}.html'
+import { Router } from '@hingejs/services'
 
 const RouteCtrl = async (req, next) => {
   const $routeDisplay = document.querySelector('h-route-display')

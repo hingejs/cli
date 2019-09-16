@@ -7,40 +7,16 @@
   "scripts": {
     "build:beta": "./node_modules/.bin/webpack --mode development --config webpack.config.js",
     "build:release": "./node_modules/.bin/webpack --mode production --config webpack.config.js",
-    "lint": "./node_modules/.bin/run-p lint:css lint:js",
+    "lint": "npm run lint:js",
     "lint:css": "./node_modules/.bin/stylelint './src/**/*.css' .'/src/**/*.html'",
     "lint:js": "./node_modules/.bin/eslint -c ./.eslintrc --ext .js ./src",
+    "prelint": "npm run lint:css",
     "preserve": "npm run build:beta",
+    "pretest": "npm run lint",
     "serve": "node dist/serve.js",
     "start": "./node_modules/.bin/webpack-dev-server --mode development --config webpack.config.js",
-    "test": "./node_modules/.bin/run-p lint unit",
+    "test": "npm run unit",
     "unit": "./node_modules/.bin/karma start ./test/unit/karma.conf.js"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "src/"
-    ],
-    "env": {
-      "NODE_ENV": "development"
-    },
-    "ext": "htm,html"
-  },
-  "stylelint": {
-    "extends": "stylelint-config-standard",
-    "rules": {
-      "color-hex-case": "lower",
-      "indentation": null,
-      "no-empty-source": null,
-      "selector-type-no-unknown": [
-        true,
-        {
-          "ignore": [
-            "custom-elements",
-            "default-namespace"
-          ]
-        }
-      ]
-    }
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -50,7 +26,7 @@
     "cross-env": "^5.2.1",
     "dotenv-extended": "^2.4.0",
     "dotenv-webpack": "^1.7.0",
-    "eslint": "^6.3.0",
+    "eslint": "^6.4.0",
     "express": "^4.16.4",
     "helmet": "^3.20.0",
     "html-loader": "^0.5.5",
@@ -64,17 +40,15 @@
     "karma-sinon": "^1.0.5",
     "karma-webpack": "^3.0.5",
     "mocha": "^5.2.0",
-    "nodemon": "^1.19.1",
-    "npm-run-all": "^4.1.5",
     "sinon": "^7.2.3",
-    "stylelint": "^9.6.0",
-    "stylelint-config-standard": "^18.2.0",
+    "stylelint": "^11.0.0",
+    "stylelint-config-standard": "^19.0.0",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
-    "@hingejs/services": "^0.0.30",
+    "@hingejs/services": "^0.0.31",
     "@hingejs/webcomponents": "^0.0.14"
   }
 }
