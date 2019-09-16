@@ -1,7 +1,7 @@
 {
   "name": "@hingejs/generator",
   "description": "HingeJS CLI Project generator",
-  "version": "0.0.54",
+  "version": "0.0.55",
   "license": "MIT",
   "keywords": [
     "app",
