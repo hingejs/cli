@@ -7,7 +7,7 @@ const { resolve } = require('path')
 
 function transformContent(content) {
   const contentStr = content.toString('utf8')
-    .replace('9000', process.env.UI_APP_PORT)
+    .replace(new RegExp('9000', 'g'), process.env.UI_APP_PORT)
   return Buffer.from(contentStr)
 }
 
