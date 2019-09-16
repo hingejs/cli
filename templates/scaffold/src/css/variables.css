@@ -1,0 +1,18 @@
+:root {
+  --header: #fcfcfc;
+  --on-header: #494949;
+  --nav: #fff;
+  --on-nav: #000;
+  --background: #f5f5f5;
+  --on-background: #3c3a36;
+  --surface: #e8e7e3;
+  --on-surface: #999;
+
+  --primary: #4d68cb;
+  --on-primary: #fff;
+  --primary-variant: #0026ad;
+  --secondary: #506be5;
+  --on-secondary: #fff;
+  --success: #5ba014;
+  --danger: #d05050;
+}

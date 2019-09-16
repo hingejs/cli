@@ -1,3 +1,4 @@
+import './css/main.css'
 import '@hingejs/webcomponents'
 import 'elements'
 import 'components'
