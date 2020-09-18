@@ -38,6 +38,10 @@ function uuid() {
   return new Date().getTime().toString(36) + window.performance.now().toString().replace(/[^0-9]/g, '')
 }
 
+function wait(ms = 1000) { 
+  return new Promise(r => setTimeout(r, ms))
+}
+
 export {
   bytesToSize,
   formatDate,
@@ -45,5 +49,6 @@ export {
   getRandomNumberBetween,
   nullToNa,
   truncate,
-  uuid
+  uuid,
+  wait
 }

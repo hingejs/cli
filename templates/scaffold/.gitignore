@@ -14,8 +14,8 @@
 *.sublime-workspace
 nbproject/
 Thumbs.db
-.vscode/*
-.vs/*
+.vscode/
+.vs/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -37,5 +37,5 @@ Thumbs.db
 # Folders
 node_modules/
 coverage/
-dist/*
+dist/
 jsdoc/

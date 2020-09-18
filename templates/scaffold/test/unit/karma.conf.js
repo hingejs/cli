@@ -18,9 +18,9 @@ module.exports = function (config) {
       skipFilesWithNoCoverage: false
     },
     files: [
-      { included: true, pattern: 'elements/index.spec.js', type: 'module' },
-      { included: true, pattern: 'components/index.spec.js', type: 'module' },
-      { included: true, pattern: 'services/index.spec.js', type: 'module' },
+      { included: true, pattern: 'elements/index.test.js', type: 'module' },
+      { included: true, pattern: 'components/index.test.js', type: 'module' },
+      { included: true, pattern: 'services/index.test.js', type: 'module' },
     ],
     frameworks: ['chai', 'mocha', 'sinon'],
     logLevel: config.LOG_INFO,
@@ -34,9 +34,9 @@ module.exports = function (config) {
     ],
     port: 9876,
     preprocessors: {
-      'components/index.spec.js': ['webpack'],
-      'elements/index.spec.js': ['webpack'],
-      'services/index.spec.js': ['webpack'],
+      'components/index.test.js': ['webpack'],
+      'elements/index.test.js': ['webpack'],
+      'services/index.test.js': ['webpack'],
     },
     reporters: ['progress', 'coverage-istanbul'],
     singleRun: true,
@@ -49,7 +49,7 @@ module.exports = function (config) {
         rules: [
           {
             enforce: 'post',
-            exclude: /(node_modules|index\.js|\.spec\.js)$/,
+            exclude: /(node_modules|index\.js|\.test\.js)$/,
             include: resolve('src/'),
             test: /\.js$/,
             use: {

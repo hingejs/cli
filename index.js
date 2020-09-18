@@ -344,7 +344,7 @@ if (!window.customElements.get(TAG_NAME)) {
 `.trimStart()
 
   const FileHTML = '<p>${test}</p>'
-  const FileSpec = `
+  const FileTest = `
 describe('${name}', () => {
 
   let el
@@ -393,8 +393,8 @@ describe('${name}', () => {
   const TESTING_PATH = `${ROOT_FOLDER}/test/unit/components`
   const unitTestExists = await pathExists(TESTING_PATH)
   if (unitTestExists) {
-    await writeFile(`${TESTING_PATH}/${name}.spec.js`, FileSpec)
-    await appendFile(`${TESTING_PATH}/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+    await writeFile(`${TESTING_PATH}/${name}.test.js`, FileTest)
+    await appendFile(`${TESTING_PATH}/index.test.js`, `import './${name}.test.js'\n`, 'utf8')
   } else {
     return Promise.reject(`Unit Testing files not added. Could not find ${TESTING_PATH}`)
   }
@@ -461,7 +461,7 @@ if (!window.customElements.get(TAG_NAME)) {
 }
 `.trimStart()
 
-  const FileSpec = `
+  const FileTest = `
 describe('${name}', () => {
 
   let el
@@ -521,8 +521,8 @@ describe('${name}', () => {
   const TESTING_PATH = `${ROOT_FOLDER}/test/unit/elements`
   const unitTestExists = await pathExists(TESTING_PATH)
   if (unitTestExists) {
-    await writeFile(`${TESTING_PATH}/${name}.spec.js`, FileSpec)
-    await appendFile(`${TESTING_PATH}/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+    await writeFile(`${TESTING_PATH}/${name}.test.js`, FileTest)
+    await appendFile(`${TESTING_PATH}/index.test.js`, `import './${name}.test.js'\n`, 'utf8')
   } else {
     return Promise.reject(`Unit Testing files not added. Could not find ${TESTING_PATH}`)
   }
@@ -586,7 +586,7 @@ if (!window.customElements.get(TAG_NAME)) {
 }
 `.trimStart()
 
-  const FileSpec = `
+  const FileTest = `
 describe('${name}', () => {
 
   let el
@@ -647,8 +647,8 @@ describe('${name}', () => {
   const TESTING_PATH = `${ROOT_FOLDER}/test/unit/elements`
   const unitTestExists = await pathExists(TESTING_PATH)
   if (unitTestExists) {
-    await writeFile(`${TESTING_PATH}/${name}.spec.js`, FileSpec)
-    await appendFile(`${TESTING_PATH}/index.spec.js`, `import './${name}.spec.js'\n`, 'utf8')
+    await writeFile(`${TESTING_PATH}/${name}.test.js`, FileTest)
+    await appendFile(`${TESTING_PATH}/index.test.js`, `import './${name}.test.js'\n`, 'utf8')
   } else {
     return Promise.reject(`Unit Testing files not added. Could not find ${TESTING_PATH}`)
   }
@@ -667,18 +667,18 @@ class ${nameCapitalized} extends BaseService {
     super()
   }
 
-  getAll() {
+  async getAll() {
     const URL = EndPoints.Test // Must be a valid URL
-    new HttpFetch().get(URL).subscribe({
-      error: this.notifyError.bind(this),
-      next: async payload => {
-        if (this._isNewPayload(payload)) {
-          this._payload = payload
-          this._mutatedPayload = await this._modelPayload(payload)
-          this.announcePayload()
-        }
-      },
-    })
+    try{
+      await payload = new HttpFetch().get(URL)
+      if (this._isNewPayload(payload)) {
+        this._payload = payload
+        this._mutatedPayload = await this._modelPayload(payload)
+        this.announcePayload()
+      }
+    } catch(error) {
+      this.notifyError(error)
+    }
   }
 
   /* async can be used for a promise.all etc. */
@@ -701,7 +701,7 @@ export default new ${nameCapitalized}()
     return Promise.reject(`Service files not added. Could not find ${TESTING_PATH}`)
   }
 
-  const FileSpec = `
+  const FileTest = `
 import { ${nameCapitalized} } from 'services'
 
 describe('${nameCapitalized}', () => {
@@ -722,8 +722,8 @@ describe('${nameCapitalized}', () => {
   const TESTING_PATH = `${ROOT_FOLDER}/test/unit/services`
   const unitTestExists = await pathExists(TESTING_PATH)
   if (unitTestExists) {
-    await writeFile(`${TESTING_PATH}/${name}.spec.js`, FileSpec)
-    await appendFile(`${TESTING_PATH}/index.spec.js`, `\nimport './${name}.spec.js'\n`, 'utf8')
+    await writeFile(`${TESTING_PATH}/${name}.test.js`, FileTest)
+    await appendFile(`${TESTING_PATH}/index.test.js`, `\nimport './${name}.test.js'\n`, 'utf8')
   } else {
     return Promise.reject(`Unit Testing files not added. Could not find ${TESTING_PATH}`)
   }
